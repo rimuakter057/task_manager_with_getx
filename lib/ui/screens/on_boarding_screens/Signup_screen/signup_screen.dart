@@ -1,8 +1,13 @@
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task_management_live_project/data/utils/app_text.dart';
+import 'package:task_management_live_project/services/network_caller.dart';
 
 import '../../../../data/utils/app_colors.dart';
+import '../../../../data/utils/app_url.dart';
+import '../../../widget/snack_bar_message.dart';
+import '../signIn_screen/signIn_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -35,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Join With Us",
+                AppTexts.signupHeadline,
                 style: textTheme.titleLarge,
               ),
 
@@ -50,7 +55,54 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-//build text form
+
+//on tap sign up
+  void _onTapSignUp(){
+    if(_formKey.currentState?.validate()??false){
+      _registerUser();
+      Navigator.pushNamed(context, SignInScreen.routeName);
+    }
+  }
+
+//sign up api function
+  Future <void> _registerUser() async{
+    _signUpProgress=false;
+    setState(() {
+
+    });
+//body
+    Map <String,dynamic> requestBody={
+        "email":_emailController.text.trim(),
+        "firstName":_firstNameController.text.trim(),
+        "lastName":_lastNameController.text.trim(),
+        "mobile":_mobileNumberController.text.trim(),
+        "password":_passwordController.text.trim(),};
+
+    final NetworkResponse response = await NetworkCaller.postRequest(url:Urls.signUp ,
+        body: requestBody);
+    _signUpProgress=false;
+    setState(() {
+
+    });
+    if(response.isSuccess){
+   _clear();
+       showSnackBar("Sign Up Successfully", context);
+
+    }else{
+      showSnackBar(response.errorMessage, context,);
+    }
+  }
+
+  //clear
+  void _clear(){
+    _emailController.clear();
+    _passwordController.clear();
+    _firstNameController.clear();
+    _lastNameController.clear();
+    _mobileNumberController.clear();
+  }
+
+  //build text form
   Form _buildTextForm() {
     return Form(
       key: _formKey,
@@ -134,9 +186,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),),
             child: ElevatedButton(
 
-              onPressed: () {  },
-              child:  Text(
-                AppTexts.signUp
+              onPressed:_onTapSignUp,
+              child:  const Text(
+                  AppTexts.signUp
               ),
             ),
           ),
@@ -145,22 +197,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-
-
-
-
   // build sign in section
   RichText _buildSignInTextSection() {
     return RichText(text: TextSpan(
-        text: "Already have an account?",
-        style:Theme.of(context).textTheme.bodySmall,
+        text: AppTexts.noAccount,
+        style:Theme.of(context).textTheme.bodyMedium,
         children: [
           TextSpan(
-            text: "Sign In",
-            style: TextStyle(
-              color: AppColors.primaryColor,
-            ),
-
+            text: AppTexts.signIn,
+            style:Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.primaryColor),
+         recognizer: TapGestureRecognizer()..onTap = (){
+           Navigator.pushNamed(context, SignInScreen.routeName);
+         },
           ),
         ]
     ),

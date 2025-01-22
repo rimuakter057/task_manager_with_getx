@@ -10,6 +10,7 @@ import '../task_progress_list_screen/task_progress_list_screen.dart';
 
 class NavScreen extends StatefulWidget {
   const NavScreen({super.key});
+  static const routeName = '/nav-screen';
 
   @override
   State<NavScreen> createState() => _NavScreenState();

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:task_management_live_project/data/utils/app_text.dart';
 
-class AddNewTask extends StatefulWidget {
-  const AddNewTask({super.key});
+class AddNewTaskScreen extends StatefulWidget {
+  const AddNewTaskScreen({super.key});
+  static const routeName = '/add-new-task-screen';
 
   @override
-  State<AddNewTask> createState() => _AddNewTaskState();
+  State<AddNewTaskScreen> createState() => _AddNewTaskScreenState();
 }
 
-class _AddNewTaskState extends State<AddNewTask> {
+class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
