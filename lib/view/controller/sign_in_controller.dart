@@ -1,8 +1,7 @@
 
 
 import 'package:get/get.dart';
-
-import '../../controllers/auth_controller.dart';
+import '../../data/controllers/auth_controller.dart';
 import '../../data/models/user_model.dart';
 import '../../data/service/network_caller.dart';
 import '../../utils/url.dart';

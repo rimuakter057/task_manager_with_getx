@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_management_live_project/data/service/network_caller.dart';
 import 'package:task_management_live_project/utils/app_text.dart';
 import 'package:task_management_live_project/view/widget/snack_bar_message.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../../utils/url.dart';
+import '../../../controller/create_task_controller.dart';
 
-class AddTaskScreen extends StatefulWidget {
-  const AddTaskScreen({super.key});
-  static const routeName = '/add-new-task-screen';
+class CreateTaskScreen extends StatefulWidget {
+  const CreateTaskScreen({super.key});
+  static const routeName = '/create-task-screen';
 
   @override
-  State<AddTaskScreen> createState() => _AddTaskScreenState();
+  State<CreateTaskScreen> createState() => _CreateTaskScreenState();
 }
 
-class _AddTaskScreenState extends State<AddTaskScreen> {
+class _CreateTaskScreenState extends State<CreateTaskScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final CreateTaskController _createTaskController = Get.find<CreateTaskController>();
+
   String? _selectedValue;
   bool _addNewTaskInProgress = false;
   @override
@@ -41,24 +45,31 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     ));
   }
 
+  //create new task Api function
   Future<void> _createNewTask() async {
-    _addNewTaskInProgress = true;
-    setState(() {});
-    Map<String, dynamic> requestBody = {
-      "title": _titleController.text.trim(),
-      "description": _descriptionController.text.trim(),
-      "status": _selectedValue
-    };
-    final NetworkResponse response = await NetworkCaller.postRequest(
-        body: requestBody, url: Urls.createTask);
-    _addNewTaskInProgress = false;
-    setState(() {});
-    if (response.isSuccess) {
+    final bool isSuccess = await CreateTaskController().createNewTask(
+      _titleController.text.trim(),
+      _descriptionController.text.trim(),
+      _selectedValue ?? 'New',
+    );
+
+
+    if (isSuccess) {
+      _clearTextField();
+      showSnackBar("Create Task Successfully", context);
+      Get.back();
+    }
+    else {
+      showSnackBar(CreateTaskController().errorMessage!, context);
+    }
+
+
+/*    if (response.isSuccess) {
       showSnackBar(AppTexts.success, context);
       _clearTextField;
     } else {
       showSnackBar(response.errorMessage, context);
-    }
+    }*/
   }
 
   //clear text field
@@ -128,22 +139,27 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               const SizedBox(
                 height: 25,
               ),
-              Visibility(
-                visible: _addNewTaskInProgress == false,
-                replacement: Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.primaryColor,
-                  ),
-                ),
-                child: ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        await _createNewTask();
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: const Text(AppTexts.continueT)),
+
+              GetBuilder<CreateTaskController>(
+                builder: (controller) {
+                  return Visibility(
+                    visible:controller.createTaskProgress == false,
+                    replacement: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            await _createNewTask();
+                          }
+                        },
+                        child: const Text(AppTexts.continueT)),
+                  );
+                }
               ),
+
             ],
           ),
         ),

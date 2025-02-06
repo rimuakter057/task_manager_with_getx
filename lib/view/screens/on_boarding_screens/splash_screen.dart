@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:task_management_live_project/utils/colors.dart';
 import 'package:task_management_live_project/view/screens/on_boarding_screens/signIn_screen/signIn_screen.dart';
-import '../../../controllers/auth_controller.dart';
+
+import '../../../data/controllers/auth_controller.dart';
 import '../../widget/app_logo.dart';
 import '../../widget/screen_background.dart';
 import '../task_screens/nav_screen/nav_screen.dart';

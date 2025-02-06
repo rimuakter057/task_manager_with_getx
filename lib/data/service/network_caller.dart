@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:task_management_live_project/view/screens/on_boarding_screens/signIn_screen/signIn_screen.dart';
 import '../../app.dart';
-import '../../controllers/auth_controller.dart';
+import '../controllers/auth_controller.dart';
+
 
 
 class NetworkResponse{

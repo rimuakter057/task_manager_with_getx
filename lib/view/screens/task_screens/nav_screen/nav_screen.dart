@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:task_management_live_project/utils/app_text.dart';
+import 'package:task_management_live_project/view/screens/task_screens/create_task_screen/create_task_screen.dart';
 import '../../../../utils/assets_path.dart';
 import '../../../../utils/colors.dart';
-import '../add_task_screen/add_task_screen.dart';
 import '../new_task_list_screen/new_task_list_screen.dart';
 import '../task_cancel_list_screen/task_cancel_list_screen.dart';
 import '../task_completed_list_screen/task_completed_list_screen.dart';
@@ -34,7 +34,7 @@ class _NavScreenState extends State<NavScreen> {
         onPressed: () {
           Navigator.pushNamed(
             context,
-            AddTaskScreen.routeName,
+            CreateTaskScreen.routeName,
           );
         },
         child: const Icon(Icons.add),

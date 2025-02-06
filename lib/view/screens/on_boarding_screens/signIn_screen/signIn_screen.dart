@@ -8,7 +8,7 @@ import 'package:task_management_live_project/data/service/network_caller.dart';
 import 'package:task_management_live_project/utils/colors.dart';
 import 'package:task_management_live_project/view/controller/sign_in_controller.dart';
 import 'package:task_management_live_project/view/screens/task_screens/nav_screen/nav_screen.dart';
-import '../../../../controllers/auth_controller.dart';
+
 import '../../../../data/models/user_model.dart';
 import '../../../../utils/app_text.dart';
 import '../../../../utils/styles.dart';
@@ -85,7 +85,7 @@ class _SignInScreenState extends State<SignInScreen> {
   void _signInOnTap(){
     if(_formKey.currentState!.validate()){
       _signInUser();
-    showSnackBar(AppTexts.success, context);
+  //  showSnackBar(AppTexts.success, context);
 
 
     }else{

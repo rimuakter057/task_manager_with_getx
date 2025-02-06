@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:task_management_live_project/controllers/auth_controller.dart';
+import 'package:get/get.dart';
 import 'package:task_management_live_project/view/screens/profile_screens/profile_update_screen/profile_update.dart';
 
+import '../../data/controllers/auth_controller.dart';
 import '../../utils/assets_path.dart';
 import '../../utils/colors.dart';
 import '../screens/on_boarding_screens/signIn_screen/signIn_screen.dart';
@@ -24,7 +25,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         onTap: (){
 
           if( fromUpdateProfile==false ){
-            Navigator.pushNamed(context,ProfileUpdate.routeName);
+            Get.toNamed(ProfileUpdate.routeName);
+
           }
 
         },

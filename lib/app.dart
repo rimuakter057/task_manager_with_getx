@@ -11,7 +11,7 @@ import 'package:task_management_live_project/view/screens/on_boarding_screens/se
 import 'package:task_management_live_project/view/screens/on_boarding_screens/signIn_screen/signIn_screen.dart';
 import 'package:task_management_live_project/view/screens/on_boarding_screens/splash_screen.dart';
 import 'package:task_management_live_project/view/screens/profile_screens/profile_update_screen/profile_update.dart';
-import 'package:task_management_live_project/view/screens/task_screens/add_task_screen/add_task_screen.dart';
+import 'package:task_management_live_project/view/screens/task_screens/create_task_screen/create_task_screen.dart';
 import 'package:task_management_live_project/view/screens/task_screens/nav_screen/nav_screen.dart';
 import 'package:task_management_live_project/view/screens/task_screens/new_task_list_screen/new_task_list_screen.dart';
 
@@ -52,8 +52,8 @@ class TaskManagement extends StatelessWidget {
           widget = const NavScreen();
         } else if (settings.name == NewTaskListScreen.routeName) {
           widget = const NewTaskListScreen();
-        } else if (settings.name == AddTaskScreen.routeName) {
-          widget = const AddTaskScreen();
+        } else if (settings.name == CreateTaskScreen.routeName) {
+          widget = const CreateTaskScreen();
         }
         else {
           widget = const Scaffold(

@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:task_management_live_project/controllers/auth_controller.dart';
+import 'package:get/get.dart';
 import 'package:task_management_live_project/view/screens/task_screens/nav_screen/nav_screen.dart';
+import '../../../../data/controllers/auth_controller.dart';
 import '../../../../data/service/network_caller.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/url.dart';
+import '../../../controller/update_profile_controller.dart';
 import '../../../widget/circular_indicator.dart';
 import '../../../widget/snack_bar_message.dart';
 
@@ -23,6 +25,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _mobileNumberController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final UpdateProfileController _updateProfileController = Get.find<UpdateProfileController>();
 
   bool _updateProfileInProgress = false;
 
@@ -140,14 +143,18 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 const SizedBox(
                   height: 50,
                 ),
-                Visibility(
-                  visible:_updateProfileInProgress == false,
-                  replacement: const CircularIndicator(),
-                  child: ElevatedButton(onPressed:_onTapUpdate,
-                      child: const Text("Update")
+                GetBuilder<UpdateProfileController>(
+                  builder: (controller) {
+                    return Visibility(
+                      visible: controller.updateProfileInProgress==false,
+                      replacement: const CircularIndicator(),
+                      child: ElevatedButton(onPressed:_onTapUpdate,
+                          child: const Text("Update")
 
 
-                  ),
+                      ),
+                    );
+                  }
                 )
               ],
             ),
@@ -182,36 +189,30 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
 Future<void> _onTapUpdate()async{
     if(_formKey.currentState!.validate()){
       _updateProfile();
-      debugPrint("success");
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const NavScreen()), (_)=>false);
-    }else{
-      debugPrint("error");
+      debugPrint("success update");
+   }else{
+      debugPrint("update error");
     }
 }
 
-//update profile
+//update profile api function
   Future<void> _updateProfile() async {
-    _updateProfileInProgress = true;
-    setState(() {});
-    Map<String, dynamic> requestBody = {
-      "email": _emailController.text.trim(),
-      "firstName": _firstNameController.text.trim(),
-      "lastName": _lastNameController.text.trim(),
-      "mobile": _mobileNumberController.text.trim(),
-    };
 
-    if (_passwordController.text.isNotEmpty) {
-      requestBody['password'] = _passwordController.text;}
+    final bool isSuccess = await UpdateProfileController().updateProfile(
+      _emailController.text.trim(),
+      _firstNameController.text.trim(),
+      _lastNameController.text.trim(),
+      _mobileNumberController.text.trim(),
+    );
 
-      final NetworkResponse response = await NetworkCaller.postRequest(
-          url: Urls.updateProfile, body: requestBody);
-      _updateProfileInProgress = false;
-      setState(() {});
-      if (response.isSuccess) {
-        _passwordController.clear();
-      } else {
-        showSnackBar(response.errorMessage, context);
-      }
+    if (isSuccess) {
+      _passwordController.clear();
+      showSnackBar( "Profile Updated Successfully", context);
+      Get.offAllNamed(NavScreen.routeName);
+    }
+    else {
+      showSnackBar(UpdateProfileController().errorMessage!, context);
+    }
   }
 }
 
