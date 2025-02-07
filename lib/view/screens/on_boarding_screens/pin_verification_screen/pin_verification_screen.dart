@@ -12,7 +12,7 @@ import '../set_password_screen/set_password_screen.dart';
 
 class PinVerificationScreen extends StatefulWidget {
   const PinVerificationScreen({super.key, });
-  //final String email;
+
 
   static const String routeName = '/pin-verification-screen';
 
@@ -89,7 +89,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
   }
 
 
-  // recover verify send email
+  // 0tp api function
 
 
   Future<void> _recoverVerifyOtp() async {
@@ -103,7 +103,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
       showSnackBar(AppTexts.emailError, context);
       return;
     }
-    //final email = widget.email;
+
     final otp=_otpController.text.trim();
     final response = await NetworkCaller.getRequest(url: Urls.recoverVerifyOtp(email!, otp));
     if(response.isSuccess){

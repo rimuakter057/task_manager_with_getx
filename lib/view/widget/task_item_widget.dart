@@ -78,13 +78,13 @@ class TaskItemWidget extends StatelessWidget {
                         onPressed: editOnTap,
                         icon: Icon(
                           Icons.edit,
-                          color: editIconColor ?? AppColors.primaryColor,
+                          color: editIconColor ?? AppColors.black,
                         )),
                     IconButton(
                         onPressed: onTap,
                         icon: Icon(
                           Icons.delete,
-                          color: deleteIconColor ?? AppColors.black,
+                          color: deleteIconColor ?? AppColors.primaryColor,
                         )),
                   ],
                 ),

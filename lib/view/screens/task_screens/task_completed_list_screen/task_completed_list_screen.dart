@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:task_management_live_project/view/controller/completed_task_controller.dart';
 
 import '../../../../data/models/task_list/task_list_status_json_model.dart';
 import '../../../../data/models/task_list/task_list_status_model.dart';
@@ -24,6 +25,7 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
   TaskModel taskModel = TaskModel();
   bool _getCompletedTaskListInProgress    = false;
   bool _taskStatusInProgress = true;
+  final CompletedTaskController _completedTaskController=Get.find<CompletedTaskController>();
   String? _selectedValue;
   List taskStatusList = [];
   @override

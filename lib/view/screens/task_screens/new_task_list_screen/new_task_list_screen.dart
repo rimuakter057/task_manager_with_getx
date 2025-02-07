@@ -5,6 +5,7 @@ import 'package:task_management_live_project/data/models/task_count/task_count_m
 import 'package:task_management_live_project/data/models/task_list/task_list_status_json_model.dart';
 import 'package:task_management_live_project/data/models/task_list/task_list_status_model.dart';
 import 'package:task_management_live_project/data/service/network_caller.dart';
+import 'package:task_management_live_project/view/controller/new_task_controller.dart';
 import 'package:task_management_live_project/view/widget/screen_background.dart';
 import '../../../../data/models/task_count/task_count_json_model.dart';
 import '../../../../utils/colors.dart';
@@ -28,9 +29,10 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
   TaskListStatusModel? newListStatusModel;
   TaskCountStatusModel? taskCountStatusModel;
   bool _getTaskCountStatusInProgress = false;
-  bool _getNewTaskListInProgress = false;
+
   bool _deleteInProgress = false;
   bool _taskStatusInProgress = true;
+  final NewTaskController _newTaskController = Get.find<NewTaskController>();
 
   String? _selectedValue;
   List taskStatusList = [];
@@ -41,17 +43,16 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
     super.initState();
     _getTaskStatus();
     _fetchAllDataSequence();
-  }//
+  } //
 
   Future<void> _fetchAllDataSequence() async {
     try {
-      await  _getSummaryStatus();
+      await _getSummaryStatus();
       await _getSummaryNewList();
     } catch (e) {
       showSnackBar('Error fetching tasks: $e', context);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,27 +64,31 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
         child: Column(
           children: [
             _buildTaskSummaryStatus(),
-            Visibility(
-                visible: _getNewTaskListInProgress == false,
-                replacement: const CircularIndicator(),
-                child: _buildTaskListview())
+            GetBuilder<NewTaskController>(
+              builder: (controller) {
+                return Visibility(
+                    visible:controller.getNewTaskListInProgress == false,
+                    replacement: const CircularIndicator(),
+                    child: _buildTaskListview(controller.taskList));
+              }
+            )
           ],
         ),
       )),
     );
   }
 
-  Expanded _buildTaskListview() {
+  Expanded _buildTaskListview(List<TaskModel> taskList) {
     return Expanded(
       child: ListView.builder(
           shrinkWrap: true,
           primary: false,
-          itemCount: newListStatusModel?.taskList?.length ?? 0,
+          itemCount: taskList.length,
           itemBuilder: (context, index) {
             return TaskItemWidget(
               status: 'New',
               color: AppColors.blue,
-              taskModel: newListStatusModel!.taskList![index],
+              taskModel: taskList[index],
               onTap: () {
                 _deleteTask(newListStatusModel!.taskList![index].sId ?? '');
                 setState(() {});
@@ -100,84 +105,77 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
   // Function to show the dialog
   Future<dynamic> _buildShowDialog(BuildContext context, int index) {
     return showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  // Local variable to manage state inside the dialog
-                  String? selectedValue = _selectedValue;
-                  debugPrint("show dialog done");
-                  return StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                      debugPrint("Stateful builder done");
-                      return AlertDialog(
-                        title: const Text('Update Task Status'),
-                        content: DropdownButtonFormField<String>(
-                          decoration: const InputDecoration(
-                            hintText: 'Choose status',
-                          ),
-                          value: selectedValue, // Use local value here
-                          items: <String>[
-                            'New',
-                            'Canceled',
-                            'Completed',
-                            'Progress'
-                          ].map((String value) {
-                            debugPrint("start alert dialog");
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (newValue) {
-                            setState(() {
-                              selectedValue =
-                                  newValue; // Update the local selected value
-                            });
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please select an option';
-                            }
-                            return null;
-                          },
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Get.back();
-                            /*  Navigator.pop(
-                                  context); */// Close the dialog without saving
-                            },
-                            child: const Text(
-                              'Cancel',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                          TextButton(
-
-                            onPressed: () {
-                              if (selectedValue != null) {
-                                // Update the global value and close the dialog
-                                _selectedValue = selectedValue;
-                              }
-                              print("alert dialog done");
-                              _updateTaskStatus(
-                                  newListStatusModel!.taskList![index].sId ??
-                                      '',
-                                  selectedValue ?? '');
-                              Navigator.pop(context); // Close the dialog
-                              print("close dialog done");
-                            },
-                            child: const Text(
-                              'Update',
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
+      context: context,
+      builder: (BuildContext context) {
+        // Local variable to manage state inside the dialog
+        String? selectedValue = _selectedValue;
+        debugPrint("show dialog done");
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            debugPrint("Stateful builder done");
+            return AlertDialog(
+              title: const Text('Update Task Status'),
+              content: DropdownButtonFormField<String>(
+                decoration: const InputDecoration(
+                  hintText: 'Choose status',
+                ),
+                value: selectedValue, // Use local value here
+                items: <String>['New', 'Canceled', 'Completed', 'Progress']
+                    .map((String value) {
+                  debugPrint("start alert dialog");
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
                   );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedValue = newValue; // Update the local selected value
+                  });
                 },
-              );
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select an option';
+                  }
+                  return null;
+                },
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                    /*  Navigator.pop(
+                                  context); */ // Close the dialog without saving
+                  },
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (selectedValue != null) {
+                      // Update the global value and close the dialog
+                      _selectedValue = selectedValue;
+                    }
+                    print("alert dialog done");
+                    _updateTaskStatus(
+                        newListStatusModel!.taskList![index].sId ?? '',
+                        selectedValue ?? '');
+                    Navigator.pop(context); // Close the dialog
+                    print("close dialog done");
+                  },
+                  child: const Text(
+                    'Update',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
 // summary status ui
@@ -228,19 +226,12 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
 
   // New summary List api function
   Future<void> _getSummaryNewList() async {
-    _getNewTaskListInProgress = true;
-    setState(() {});
-    final NetworkResponse response =
-        await NetworkCaller.getRequest(url: Urls.taskStatusList('New'));
+    final bool isSuccess = await _newTaskController.getSummaryNewList();
 
-    if (response.isSuccess) {
-      newListStatusModel = TaskListStatusModel.fromJson(response.responseData!);
-      setState(() {});
-    } else {
-      showSnackBar(response.errorMessage, context);
+    if (!isSuccess) {
+      showSnackBar(_newTaskController.errorMessage!, context);
     }
-    _getNewTaskListInProgress = false;
-    setState(() {});
+
   }
 
   // delete task api function
@@ -276,8 +267,8 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
 
   //get task status api function
   Future<List<TaskModel>> _getTaskStatus() async {
-    final NetworkResponse response = await NetworkCaller.getRequest(
-        url: Urls.taskStatusList('New'));
+    final NetworkResponse response =
+        await NetworkCaller.getRequest(url: Urls.taskStatusList('New'));
     if (response.isSuccess) {
       final List<dynamic> data = response.responseData?['data'] ?? [];
       return data.map((task) => TaskModel.fromJson(task)).toList();

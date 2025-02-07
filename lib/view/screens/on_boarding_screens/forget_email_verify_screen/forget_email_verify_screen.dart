@@ -93,7 +93,7 @@ class _ForgetEmailVerifyScreenState extends State<ForgetEmailVerifyScreen> {
 
 
 
-  // recover verify send email
+  // recover verify send email api function
 
   Future<void> _recoverVerifyEmail() async {
     _recoveryEmailInProgress = true;
@@ -106,9 +106,7 @@ class _ForgetEmailVerifyScreenState extends State<ForgetEmailVerifyScreen> {
       await prefs.setString("email", email);
       debugPrint(email);
       Get.toNamed( PinVerificationScreen.routeName);
-     // Navigator.pushNamed(context, PinVerificationScreen.routeName,
-     // arguments: email
-     // );
+
       showSnackBar(AppTexts.mailSuccess, context);
 
     }

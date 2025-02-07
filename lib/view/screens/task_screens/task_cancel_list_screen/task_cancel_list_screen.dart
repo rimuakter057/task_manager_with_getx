@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_management_live_project/utils/app_text.dart';
+import 'package:task_management_live_project/view/controller/cancel_task_controller.dart';
 
 import '../../../../data/models/task_list/task_list_status_json_model.dart';
 import '../../../../data/models/task_list/task_list_status_model.dart';
@@ -21,12 +22,13 @@ class TaskCancelListScreen extends StatefulWidget {
 }
 
 class _TaskCancelListScreenState extends State<TaskCancelListScreen> {
-  TaskListStatusModel? newListStatusModel;
+  TaskListStatusModel? canceledListStatusModel;
   TaskModel taskModel = TaskModel();
   String? _selectedValue;
   List taskStatusList = [];
   bool _getCancelledTaskListInProgress   = false;
   bool _taskStatusInProgress = true;
+ // final CancelTaskController _cancelTaskController=Get.find<CancelTaskController>();
   @override
   void initState() {
     // TODO: implement initState
@@ -46,15 +48,14 @@ class _TaskCancelListScreenState extends State<TaskCancelListScreen> {
             child: ListView.builder(
                 shrinkWrap: true,
                 primary: false,
-                itemCount: newListStatusModel?.taskList?.length ?? 0,
+                itemCount: canceledListStatusModel?.taskList?.length ?? 0,
                 itemBuilder: (context, index) {
                   return TaskItemWidget(
-                    //status: newListStatusModel!.taskList![index].status ?? '',
                     status: 'Canceled',
                     color: AppColors.primaryColor,
-                    taskModel: newListStatusModel!.taskList![index],
+                    taskModel: canceledListStatusModel!.taskList![index],
                     onTap: () {
-                      _deleteTask(newListStatusModel!.taskList![index].sId ?? '');
+                      _deleteTask(canceledListStatusModel!.taskList![index].sId ?? '');
                       setState(() {
 
                       });
@@ -133,7 +134,7 @@ class _TaskCancelListScreenState extends State<TaskCancelListScreen> {
                       _selectedValue = selectedValue;
                     }
                     _updateTaskStatus(
-                        newListStatusModel!.taskList![index].sId ??
+                        canceledListStatusModel!.taskList![index].sId ??
                             '',
                         selectedValue ?? '');
                     Navigator.pop(context); // Close the dialog
@@ -151,15 +152,25 @@ class _TaskCancelListScreenState extends State<TaskCancelListScreen> {
       },
     );
   }
+
   // cancelled summary List api function
+/*  Future<void> _getSummaryCancelledList() async {
+    final bool isSuccess = await _cancelTaskController.getSummaryCancelList();
+
+    if (!isSuccess) {
+      showSnackBar(_cancelTaskController.errorMessage!, context);
+    }
+
+  }*/
+
   Future<void> _getSummaryCancelledList() async {
-    _getCancelledTaskListInProgress     = true;
+    _getCancelledTaskListInProgress      = true;
     setState(() {});
     final NetworkResponse response =
-    await NetworkCaller.getRequest(url: Urls.taskStatusList('Canceled'));
+    await NetworkCaller.getRequest(url: Urls.taskStatusList('Completed'));
 
     if(response.isSuccess){
-      newListStatusModel =
+      canceledListStatusModel =
           TaskListStatusModel.fromJson(response.responseData!);
       setState(() {
 
@@ -167,9 +178,10 @@ class _TaskCancelListScreenState extends State<TaskCancelListScreen> {
     }else{
       showSnackBar(response.errorMessage, context);
     }
-    _getCancelledTaskListInProgress   = false;
+    _getCancelledTaskListInProgress    = false;
     setState(() {});
   }
+
 
   // delete task api function
   Future<void> _deleteTask(String taskId) async {
