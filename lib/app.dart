@@ -5,8 +5,8 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:task_management_live_project/data/binding/controller_binding.dart';
 import 'package:task_management_live_project/theme/theme_styles.dart';
 import 'package:task_management_live_project/view/screens/on_boarding_screens/Signup_screen/signup_screen.dart';
-import 'package:task_management_live_project/view/screens/on_boarding_screens/forget_email_verify_screen/forget_email_verify_screen.dart';
-import 'package:task_management_live_project/view/screens/on_boarding_screens/pin_verification_screen/pin_verification_screen.dart';
+import 'package:task_management_live_project/view/screens/on_boarding_screens/recover_email_verify_screen/recover_email_verify_screen.dart';
+import 'package:task_management_live_project/view/screens/on_boarding_screens/recover_otp_verify_screen/recover_otp_verify_screen.dart';
 import 'package:task_management_live_project/view/screens/on_boarding_screens/set_password_screen/set_password_screen.dart';
 import 'package:task_management_live_project/view/screens/on_boarding_screens/signIn_screen/signIn_screen.dart';
 import 'package:task_management_live_project/view/screens/on_boarding_screens/splash_screen.dart';
@@ -36,8 +36,8 @@ class TaskManagement extends StatelessWidget {
           widget = const SignInScreen();
         } else if (settings.name == SignUpScreen.routeName) {
           widget = const SignUpScreen();
-        } else if (settings.name ==ForgetEmailVerifyScreen.routeName) {
-          widget = const ForgetEmailVerifyScreen();
+        } else if (settings.name ==RecoverEmailVerifyScreen .routeName) {
+          widget = const RecoverEmailVerifyScreen ();
         }
         else if (settings.name ==ProfileUpdate .routeName) {
           widget = const ProfileUpdate ();
@@ -45,8 +45,8 @@ class TaskManagement extends StatelessWidget {
         else if (settings.name == SetPasswordScreen.routeName) {
           widget = const SetPasswordScreen(
           );
-        } else if (settings.name == PinVerificationScreen.routeName) {
-          widget =   PinVerificationScreen();
+        } else if (settings.name == RecoverOtpVerifyScreen.routeName) {
+          widget =   const RecoverOtpVerifyScreen();
         }
         else if (settings.name == NavScreen.routeName) {
           widget = const NavScreen();

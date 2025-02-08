@@ -6,23 +6,27 @@ import 'package:task_management_live_project/utils/app_text.dart';
 import '../../../../data/service/network_caller.dart';
 import '../../../../utils/styles.dart';
 import '../../../../utils/url.dart';
+import '../../../controller/recover_otp_controller.dart';
+import '../../../widget/circular_indicator.dart';
 import '../../../widget/sign_in_up_section.dart';
 import '../../../widget/snack_bar_message.dart';
 import '../set_password_screen/set_password_screen.dart';
 
-class PinVerificationScreen extends StatefulWidget {
-  const PinVerificationScreen({super.key, });
+class RecoverOtpVerifyScreen extends StatefulWidget {
+  const RecoverOtpVerifyScreen({super.key, });
 
 
-  static const String routeName = '/pin-verification-screen';
+  static const String routeName = '/recover-otp-screen';
 
   @override
-  State<PinVerificationScreen> createState() => _PinVerificationScreenState();
+  State<RecoverOtpVerifyScreen> createState() => _RecoverOtpVerifyScreenState();
 }
 
-class _PinVerificationScreenState extends State<PinVerificationScreen> {
+class _RecoverOtpVerifyScreenState extends State<RecoverOtpVerifyScreen> {
   TextEditingController _otpController = TextEditingController();
-  bool _recoveryOtpInProgress = false;
+
+  final RecoverOtpController _recoverOtpController =
+  Get.find<RecoverOtpController>();
 
 
   @override
@@ -59,11 +63,19 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
             const SizedBox(
               height: 40,
             ),
-            ElevatedButton(
-              onPressed: _confirmedOnTap,
-              child: const Text(
-                "Confirm",
-              ),
+            GetBuilder<RecoverOtpController>(
+              builder: (controller) {
+                return Visibility(
+                      visible: controller.recoveryOtpInProgress== false,
+                  replacement:const CircularIndicator(),
+                  child: ElevatedButton(
+                    onPressed: _confirmedOnTap,
+                    child: const Text(
+                      "Confirm",
+                    ),
+                  ),
+                );
+              }
             ),
             const SizedBox(
               height: 20,
@@ -93,36 +105,16 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
 
 
   Future<void> _recoverVerifyOtp() async {
-    _recoveryOtpInProgress = true;
-    setState(() {
-    });
-    final prefs = await   SharedPreferences.getInstance();
-    final email = prefs.getString("email");
+    final bool isSuccess = await  _recoverOtpController.recoverVerifyOtp(_otpController);
 
-    if( email==null){
-      showSnackBar(AppTexts.emailError, context);
-      return;
+    if(isSuccess){
+      Get.toNamed(  SetPasswordScreen.routeName);
     }
-
-    final otp=_otpController.text.trim();
-    final response = await NetworkCaller.getRequest(url: Urls.recoverVerifyOtp(email!, otp));
-    if(response.isSuccess){
-      await prefs.setString("otp", otp);
-      print(otp);
-      Get.offAll(const SetPasswordScreen());
-   //   Navigator.pushNamedAndRemoveUntil(context, SetPasswordScreen.routeName,(value)=>false
-        // arguments: email
-     // );
-      showSnackBar(AppTexts.mailSuccess, context);
+    else if(!isSuccess){
+      showSnackBar(AppTexts.otpFailed, context);
     }
-    else{
-      showSnackBar(AppTexts.pinError, context);
-    }
-    _recoveryOtpInProgress = false;
-    setState(() {
-
-    });
   }
+
 
 
 

@@ -2,7 +2,6 @@
 import 'package:get/get.dart';
 import 'package:task_management_live_project/data/models/task_list/task_list_status_json_model.dart';
 import 'package:task_management_live_project/data/models/task_list/task_list_status_model.dart';
-
 import '../../data/service/network_caller.dart';
 import '../../utils/url.dart';
 
@@ -16,9 +15,6 @@ class NewTaskController extends GetxController {
   TaskListStatusModel? _taskListStatusModel;
 
   List <TaskModel> get taskList => _taskListStatusModel?.taskList ?? [];
-
-
-
 
   Future<bool> getSummaryNewList() async {
     bool isSuccess = false;
@@ -34,7 +30,6 @@ class NewTaskController extends GetxController {
     } else {
       _errorMessage = response.errorMessage;
     }
-
 
     _getNewTaskListInProgress = false;
     update();

@@ -224,7 +224,7 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
     setState(() {});
   }
 
-  // New summary List api function
+  // New summary List api function get x
   Future<void> _getSummaryNewList() async {
     final bool isSuccess = await _newTaskController.getSummaryNewList();
 

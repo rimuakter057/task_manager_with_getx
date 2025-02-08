@@ -16,7 +16,8 @@ import '../../../../utils/url.dart';
 import '../../../widget/sign_in_up_section.dart';
 import '../../../widget/snack_bar_message.dart';
 import '../Signup_screen/signup_screen.dart';
-import '../forget_email_verify_screen/forget_email_verify_screen.dart';
+import '../recover_email_verify_screen/recover_email_verify_screen.dart';
+
 
 
 
@@ -61,7 +62,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: 10,
               ),
               TextButton(onPressed: (){
-                Get.toNamed(ForgetEmailVerifyScreen.routeName);
+                Get.toNamed(RecoverEmailVerifyScreen .routeName);
                // Navigator.pushNamed(context, ForgetEmailVerifyScreen.routeName);
               },
                 child: Text(AppTexts.forgotPass,style: bodySmallStyle
