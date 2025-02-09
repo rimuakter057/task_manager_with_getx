@@ -11,6 +11,7 @@ import 'package:task_management_live_project/view/widget/snack_bar_message.dart'
 import '../../../../utils/app_text.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/url.dart';
+import '../../../controller/set_password_controller.dart';
 import '../../../widget/sign_in_up_section.dart';
 
 class SetPasswordScreen extends StatefulWidget {
@@ -18,8 +19,7 @@ class SetPasswordScreen extends StatefulWidget {
     super.key,
   });
 
-/*  final String otp;
-  final String email;*/
+
 
   static const routeName = '/set-password-screen';
 
@@ -33,6 +33,8 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _setInProgress = false;
+
+  final SetPasswordController _setPasswordController = Get.find<SetPasswordController>();
 
   late String email;
   late String otp;
@@ -121,62 +123,46 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
           const SizedBox(
             height: 40,
           ),
-          Visibility(
-            visible: _setInProgress == false,
-            replacement: const CircularIndicator(),
-            child: ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _setPasswordApi();
-                }
-                Get.toNamed(SignInScreen.routeName);
+          GetBuilder<SetPasswordController>(
+            builder: (controller) {
+              return Visibility(
+                visible:controller.setInProgress == false,
+                replacement: const CircularIndicator(),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _setPasswordApi();
+                    }
+                    //Get.toNamed(SignInScreen.routeName);
 
-                // Navigator.pushNamed(context, SignInScreen.routeName);
-              },
-              child: const Text(
-               AppTexts.confirmedPasswordHint,
-              ),
-            ),
+                    // Navigator.pushNamed(context, SignInScreen.routeName);
+                  },
+                  child: const Text(
+                   AppTexts.confirmedPasswordHint,
+                  )
+
+                ),
+              );
+            }
           ),
         ],
       ),
     );
   }
 
-  //set api
+  //set api function
+
   Future<void> _setPasswordApi() async {
-    setState(() {
-      _setInProgress = true;
-    });
-    final password = _passwordController.text.trim();
+ bool isSuccess = await _setPasswordController.setPasswordApi(
+   _passwordController.text
+ );
+    if (isSuccess) {
+      Get.offAll(const SignInScreen());
 
-    final NetworkResponse response =
-        await NetworkCaller.postRequest(url: Urls.recoverResetPassword, body: {
-        "email":email,
-        "OTP": otp,
-        "password":password
-    });
-    if (response.isSuccess) {
-      final responseData = response.responseData!;
-      print(responseData);
-      if (responseData['status'] == 'success') {
-        debugPrint(password);
-        Get.offAll(const SignInScreen());
-       /* Navigator.pushNamedAndRemoveUntil(
-            context, SignInScreen.routeName, (value) => false);*/
       } else {
-        showSnackBar(responseData['status'], context);
-        debugPrint(response.responseData!['status']);
+      showSnackBar(AppTexts.failed, context);
       }
-    } else {
-      showSnackBar(response.errorMessage, context);
     }
-    setState(() {
-      _setInProgress = false;
-    });
-  }
-
-
 
   // dispose
   @override
@@ -185,4 +171,8 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     _confirmedPasswordController.dispose();
     super.dispose();
   }
+
+
+
+
 }

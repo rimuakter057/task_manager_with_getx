@@ -8,6 +8,7 @@ import '../../view/controller/create_task_controller.dart';
 import '../../view/controller/new_task_controller.dart';
 import '../../view/controller/recover_email_controller.dart';
 import '../../view/controller/recover_otp_controller.dart';
+import '../../view/controller/set_password_controller.dart';
 import '../../view/controller/signup_controller.dart';
 
 
@@ -24,6 +25,7 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => ProgressTaskController());
     Get.lazyPut(() => RecoverEmailController());
     Get.lazyPut(() => RecoverOtpController());
+    Get.lazyPut(() => SetPasswordController());
 
   }
 }

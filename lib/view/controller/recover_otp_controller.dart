@@ -15,33 +15,6 @@ class RecoverOtpController extends GetxController {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-
-
-/*  Future<bool> recoverVerifyOtp(TextEditingController emailController) async {
-    bool isSuccess = false;
-    _recoveryOtpInProgress = true;
-    update();
-    String email = emailController.text.trim();
-    final NetworkResponse response =
-    await NetworkCaller.getRequest(url: Urls.recoverVerifyEmail(email));
-    if (response.isSuccess) {
-      final prefs=await SharedPreferences.getInstance();
-      await prefs.setString("email", email);
-      debugPrint(email);
-      isSuccess = true;
-      _errorMessage = null;
-      //Get.toNamed( PinVerificationScreen.routeName);
-
-      // showSnackBar(AppTexts.mailSuccess, context);
-
-    }
-    else{
-      _errorMessage = response.errorMessage;
-    }
-    _recoveryOtpInProgress = false;
-    update();
-    return isSuccess;
-  }*/
   Future<bool> recoverVerifyOtp(TextEditingController otpController) async {
     bool isSuccess = false;
     _recoveryOtpInProgress = true;
@@ -49,7 +22,7 @@ class RecoverOtpController extends GetxController {
     final prefs = await   SharedPreferences.getInstance();
     final email = prefs.getString("email");
 
-  /*  if( email==null){
+ /*   if( email==null){
       showSnackBar(AppTexts.emailError, context);
       return;
     }*/
