@@ -30,7 +30,6 @@ class NewTaskController extends GetxController {
     } else {
       _errorMessage = response.errorMessage;
     }
-
     _getNewTaskListInProgress = false;
     update();
     return isSuccess;

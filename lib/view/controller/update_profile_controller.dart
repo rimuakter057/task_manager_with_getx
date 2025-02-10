@@ -25,8 +25,6 @@ class UpdateProfileController extends GetxController {
 
     final NetworkResponse response = await NetworkCaller.postRequest(
         url: Urls.updateProfile, body: requestBody);
-   /* _updateProfileInProgress = false;
-    setState(() {});*/
     if (response.isSuccess) {
       _errorMessage = null;
       _updateProfileInProgress = false;

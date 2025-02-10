@@ -17,8 +17,6 @@ class RecoverEmailController extends GetxController {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-
-
   Future<bool> recoverVerifyEmail(TextEditingController emailController) async {
     bool isSuccess = false;
     _recoveryEmailInProgress = true;

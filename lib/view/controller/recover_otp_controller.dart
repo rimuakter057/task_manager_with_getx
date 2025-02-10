@@ -22,20 +22,12 @@ class RecoverOtpController extends GetxController {
     final prefs = await   SharedPreferences.getInstance();
     final email = prefs.getString("email");
 
- /*   if( email==null){
-      showSnackBar(AppTexts.emailError, context);
-      return;
-    }*/
-
     final otp=otpController.text.trim();
     final response = await NetworkCaller.getRequest(url: Urls.recoverVerifyOtp(email!, otp));
     if(response.isSuccess){
       await prefs.setString("otp", otp);
       print(otp);
-     // Get.offAll(const SetPasswordScreen());
-      //   Navigator.pushNamedAndRemoveUntil(context, SetPasswordScreen.routeName,(value)=>false
-      // arguments: email
-      // );
+
       isSuccess = true;
       _errorMessage = null;
     }

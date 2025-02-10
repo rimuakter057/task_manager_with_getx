@@ -10,18 +10,16 @@ import '../../data/models/task_count/task_count_model.dart';
 import '../../data/service/network_caller.dart';
 import '../../utils/url.dart';
 
-/*
 class GetSummaryStatusController extends GetxController {
   bool _taskStatusInProgress = false;
-  bool get recoveryOtpInProgress=> _taskStatusInProgress;
+  bool get taskStatusInProgress=> _taskStatusInProgress;
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
   TaskCountStatusModel? taskCountStatusModel;
- // List <TaskCountModel> get taskList => _taskCountStatusModel?.TaskCountModel?? [];
 
   Future<bool> _getSummaryStatus() async {
     bool isSuccess = false;
-    bool _taskStatusInProgress = true;
+  _taskStatusInProgress = true;
  update();
     final NetworkResponse response =
     await NetworkCaller.getRequest(url: Urls.taskStatusCount);
@@ -29,12 +27,35 @@ class GetSummaryStatusController extends GetxController {
     if (response.isSuccess) {
       taskCountStatusModel =
           TaskCountStatusModel.fromJson(response.responseData!);
-      setState(() {});
+     isSuccess = true;
+    _errorMessage = null;
     } else {
-      showSnackBar(response.errorMessage, context);
+        _errorMessage = response.errorMessage;
     }
-    _getTaskCountStatusInProgress = false;
-    setState(() {});
+   _taskStatusInProgress = false;
+ update();
+ return isSuccess;
   }
 
-}*/
+}
+
+/*
+Future<bool> getTaskCountingByStatus() async {
+  bool isSuccess = false;
+  _inProgressTaskCount = true;
+  update();
+  final NetworkResponse response =
+  await NetworkCaller.getRequest(url: Urls.taskCountByStatus);
+  if (response.isSuccess) {
+    taskCountByStatusModel =
+        TaskCountByStatusModel.fromJson(response.responseData!);
+    isSuccess = true;
+    _errorMessage = null;
+  } else {
+    _errorMessage = response.errorMessage;
+  }
+  _inProgressTaskCount = false;
+  update();
+  return isSuccess;
+}
+*/

@@ -9,7 +9,6 @@ import '../../utils/url.dart';
 class SignUpController extends GetxController {
   bool _signUpProgress = false;
   bool get signUpProgress => _signUpProgress;
-
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 

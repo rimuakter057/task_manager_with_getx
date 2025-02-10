@@ -45,9 +45,6 @@ class SetPasswordController extends GetxController {
         isSuccess = true;
         debugPrint("password.........3333333333");
         _errorMessage = null;
-       // Get.offAll(const SignInScreen());
-        /* Navigator.pushNamedAndRemoveUntil(
-            context, SignInScreen.routeName, (value) => false);*/
       }
       else {
         debugPrint("password.........555553");
@@ -60,8 +57,4 @@ class SetPasswordController extends GetxController {
     update();
     return isSuccess;
   }
-
-
-
-
 }

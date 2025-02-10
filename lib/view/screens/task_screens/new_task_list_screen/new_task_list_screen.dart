@@ -10,6 +10,7 @@ import 'package:task_management_live_project/view/widget/screen_background.dart'
 import '../../../../data/models/task_count/task_count_json_model.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/url.dart';
+import '../../../controller/get_summary_status_controller.dart';
 import '../../../widget/app_bar.dart';
 import '../../../widget/circular_indicator.dart';
 import '../../../widget/snack_bar_message.dart';
@@ -28,11 +29,12 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
   TaskModel taskModel = TaskModel();
   TaskListStatusModel? newListStatusModel;
   TaskCountStatusModel? taskCountStatusModel;
+  bool _deleteInProgress = false;
+ bool _taskStatusInProgress = true;
   bool _getTaskCountStatusInProgress = false;
 
-  bool _deleteInProgress = false;
-  bool _taskStatusInProgress = true;
   final NewTaskController _newTaskController = Get.find<NewTaskController>();
+  //final GetSummaryStatusController  _getSummaryStatusController = Get.find<GetSummaryStatusController >();
 
   String? _selectedValue;
   List taskStatusList = [];
@@ -180,30 +182,32 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
 
 // summary status ui
   Widget _buildTaskSummaryStatus() {
-    return Visibility(
-      visible: _getTaskCountStatusInProgress == false,
-      replacement: CircularProgressIndicator(
-        color: AppColors.primaryColor,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          height: 100,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: taskCountStatusModel?.taskByStatusList?.length ?? 0,
-            itemBuilder: (context, index) {
-              final TaskCountModel model =
-                  taskCountStatusModel!.taskByStatusList![index];
-              return TaskStatusSummaryCounterWidget(
-                title: model.sId ?? '',
-                count: model.sum.toString(),
-              );
-            },
+
+        return Visibility(
+          visible: _getTaskCountStatusInProgress == false,
+          replacement: CircularProgressIndicator(
+            color: AppColors.primaryColor,
           ),
-        ),
-      ),
-    );
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: taskCountStatusModel?.taskByStatusList?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final TaskCountModel model =
+                      taskCountStatusModel!.taskByStatusList![index];
+                  return TaskStatusSummaryCounterWidget(
+                    title: model.sId ?? '',
+                    count: model.sum.toString(),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+
   }
 
   // get summary status api function
@@ -223,6 +227,14 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
     _getTaskCountStatusInProgress = false;
     setState(() {});
   }
+/*  Future<void> _getSummaryStatus() async {
+
+    final bool isSuccess = await _getSummaryStatusController.taskStatusInProgress;
+    if (!isSuccess) {
+      showSnackBar(_getSummaryStatusController.errorMessage!, context);
+    }
+
+  }*/
 
   // New summary List api function get x
   Future<void> _getSummaryNewList() async {
