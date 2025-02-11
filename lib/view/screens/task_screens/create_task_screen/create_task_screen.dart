@@ -21,9 +21,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final CreateTaskController _createTaskController = Get.find<CreateTaskController>();
-
-  String? _selectedValue;
-  bool _addNewTaskInProgress = false;
+ // bool _addNewTaskInProgress = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,32 +43,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     ));
   }
 
-  //create new task Api function
-  Future<void> _createNewTask() async {
-    final bool isSuccess = await CreateTaskController().createNewTask(
-      _titleController.text.trim(),
-      _descriptionController.text.trim(),
-      _selectedValue ?? 'New',
-    );
 
-
-    if (isSuccess) {
-      _clearTextField();
-      showSnackBar("Create Task Successfully", context);
-      Get.back();
-    }
-    else {
-      showSnackBar(CreateTaskController().errorMessage!, context);
-    }
-
-
-/*    if (response.isSuccess) {
-      showSnackBar(AppTexts.success, context);
-      _clearTextField;
-    } else {
-      showSnackBar(response.errorMessage, context);
-    }*/
-  }
 
   //clear text field
   void _clearTextField() {
@@ -86,7 +59,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              DropdownButtonFormField<String>(
+            /*  DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
                   hintText: 'choose status',
 
@@ -109,7 +82,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   }
                   return null;
                 },
-              ),
+              ),*/
               const SizedBox(
                 height: 15,
               ),
@@ -166,6 +139,26 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
       ),
     );
   }
+
+  //create new task Api function
+  Future<void> _createNewTask() async {
+    final bool isSuccess = await _createTaskController.createNewTask(
+      _titleController.text.trim(),
+      _descriptionController.text.trim(),
+    );
+    if (isSuccess) {
+      _clearTextField();
+      Get.back();
+      Get.snackbar('Success', 'Task Added Successfully');
+    }
+    else {
+      Get.snackbar('Error', _createTaskController.errorMessage!);
+    }
+
+  }
+
+
+
 
   @override
   void dispose() {

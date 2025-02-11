@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management_live_project/data/service/network_caller.dart';
-import 'package:task_management_live_project/view/screens/on_boarding_screens/signIn_screen/signIn_screen.dart';
 import 'package:task_management_live_project/view/widget/circular_indicator.dart';
 import 'package:task_management_live_project/view/widget/snack_bar_message.dart';
 
@@ -13,6 +12,7 @@ import '../../../../utils/colors.dart';
 import '../../../../utils/url.dart';
 import '../../../controller/set_password_controller.dart';
 import '../../../widget/sign_in_up_section.dart';
+import '../signIn_screen/signIn_screen.dart';
 
 class SetPasswordScreen extends StatefulWidget {
   const SetPasswordScreen({

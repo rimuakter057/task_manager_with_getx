@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_management_live_project/data/models/task_list/task_list_status_model.dart';
 
 import '../../data/service/network_caller.dart';
 import '../../utils/colors.dart';
 import '../../utils/url.dart';
+import '../controller/delete_new_task_controller.dart';
 
 class TaskItemWidget extends StatelessWidget {
 
@@ -14,10 +16,8 @@ class TaskItemWidget extends StatelessWidget {
     this.deleteIconColor,
     this.editIconColor,
     required this.taskModel,
-    required this.onTap,
-    required this.editOnTap,
-
-
+  this.editOnTap,
+     this.onDeleteTask,
   });
 
   final String status;
@@ -25,15 +25,16 @@ class TaskItemWidget extends StatelessWidget {
   final Color? deleteIconColor;
   final Color? editIconColor;
   final TaskModel taskModel;
-  final void Function()? onTap;
+  final Future<void> Function(String taskId) ?onDeleteTask;
   final void Function()? editOnTap;
+
 
 
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Card(
+   return Card(
       elevation: 0,
       child: ListTile(
         title: Column(
@@ -81,7 +82,8 @@ class TaskItemWidget extends StatelessWidget {
                           color: editIconColor ?? AppColors.black,
                         )),
                     IconButton(
-                        onPressed: onTap,
+                        onPressed: onDeleteTask!=null?(){onDeleteTask!(taskModel.sId!);}:null,
+
                         icon: Icon(
                           Icons.delete,
                           color: deleteIconColor ?? AppColors.primaryColor,
@@ -95,12 +97,6 @@ class TaskItemWidget extends StatelessWidget {
       ),
     );
   }
-
-
-
-
-
-
 }
 
 

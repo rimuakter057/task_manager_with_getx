@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:task_management_live_project/utils/colors.dart';
-import 'package:task_management_live_project/view/screens/on_boarding_screens/signIn_screen/signIn_screen.dart';
+import 'package:task_management_live_project/view/screens/auth_screen/signIn_screen/signIn_screen.dart';
 
 import '../../../data/controllers/auth_controller.dart';
 import '../../widget/app_logo.dart';
@@ -31,8 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
     bool isUserLoggedIn = await AuthController.isUserLoggedIn();
     if (isUserLoggedIn) {
       Get.offAllNamed(NavScreen.routeName);
-   /*   Navigator.pushNamedAndRemoveUntil(
-          context, NavScreen.routeName, (value) => false);*/
+
     } else {
       Get.offNamed(SignInScreen.routeName);
     //  Navigator.pushReplacementNamed(context, SignInScreen.routeName);

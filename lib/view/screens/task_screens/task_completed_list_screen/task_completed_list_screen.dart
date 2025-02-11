@@ -1,8 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:task_management_live_project/view/controller/completed_task_controller.dart';
 
 import '../../../../data/models/task_list/task_list_status_json_model.dart';
 import '../../../../data/models/task_list/task_list_status_model.dart';
@@ -21,12 +19,11 @@ class TaskCompletedListScreen extends StatefulWidget {
 }
 
 class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
-  TaskListStatusModel? completedListStatusModel;
+  TaskListStatusModel? taskListStatusModel;
   TaskModel taskModel = TaskModel();
   bool _getCompletedTaskListInProgress    = false;
   bool _taskStatusInProgress = true;
-  final CompletedTaskController _completedTaskController=Get.find<CompletedTaskController>();
-  String? _selectedValue;
+ String? _selectedValue;
   List taskStatusList = [];
   @override
   void initState() {
@@ -47,19 +44,21 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
             child: ListView.builder(
                 shrinkWrap: true,
                 primary: false,
-                itemCount: completedListStatusModel?.taskList?.length ?? 0,
+                itemCount: taskListStatusModel?.taskList?.length ?? 0,
                 itemBuilder: (context, index) {
                   return TaskItemWidget(
                    // status: newListStatusModel!.taskList![index].status ?? '',
                     status: 'Completed',
                     color: AppColors.green,
-                    taskModel: completedListStatusModel!.taskList![index],
-                    onTap: () {
-                      _deleteTask(completedListStatusModel!.taskList![index].sId ?? '');
+                    taskModel: taskListStatusModel!.taskList![index],
+                 /*   onTap: () {
+                      _deleteTask(taskListStatusModel!.taskList![index].sId ?? '');
                       setState(() {
 
                       });
-                    }, editOnTap: () {
+                    },*/
+                    onDeleteTask:_deleteTask ,
+                    editOnTap: () {
                     _buildShowDialog(context, index);
                   },
                   //  onUpdateTaskStatus: (String taskId, String newStatus) {  },
@@ -135,7 +134,7 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
                     }
                     print("alert dialog done");
                     _updateTaskStatus(
-                        completedListStatusModel!.taskList![index].sId ??
+                        taskListStatusModel!.taskList![index].sId ??
                             '',
                         selectedValue ?? '');
                     Navigator.pop(context); // Close the dialog
@@ -162,7 +161,7 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
     await NetworkCaller.getRequest(url: Urls.taskStatusList('Completed'));
 
     if(response.isSuccess){
-      completedListStatusModel =
+      taskListStatusModel =
           TaskListStatusModel.fromJson(response.responseData!);
       setState(() {
 
@@ -185,6 +184,16 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
     }
 
   }
+
+/*  // delete task api function get x
+  Future<void> _deleteTask(String taskId) async {
+    final bool isSuccess = await _deleteNewTaskController.deleteTask(taskId);
+    if (isSuccess) {
+      showSnackBar("Task deleted successfully", context);
+    } else {
+      showSnackBar(_newTaskController.errorMessage!, context);
+    }
+  }*/
 
 
 

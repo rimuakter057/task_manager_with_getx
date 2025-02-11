@@ -116,28 +116,7 @@ class _RecoverEmailVerifyScreenState extends State<RecoverEmailVerifyScreen> {
     }
   }
 
-  /* Future<void> _recoverVerifyEmail() async {
-    _recoveryEmailInProgress = true;
-    setState(() {});
-    String email = _emailController.text.trim();
-    final NetworkResponse response =
-    await NetworkCaller.getRequest(url: Urls.recoverVerifyEmail(email));
-    if (response.isSuccess) {
-      final prefs=await SharedPreferences.getInstance();
-      await prefs.setString("email", email);
-      debugPrint(email);
-      Get.toNamed( PinVerificationScreen.routeName);
 
-      showSnackBar(AppTexts.mailSuccess, context);
-
-    }
-    else{
-
-      showSnackBar(AppTexts.emailError, context);
-    }
-    _recoveryEmailInProgress = false;
-    setState(() {});
-  }*/
   //dispose
   @override
   void dispose() {

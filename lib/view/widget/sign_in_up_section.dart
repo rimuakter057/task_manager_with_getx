@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_management_live_project/utils/app_text.dart';
 import '../../utils/colors.dart';
-import '../screens/on_boarding_screens/signIn_screen/signIn_screen.dart';
+import '../screens/auth_screen/signIn_screen/signIn_screen.dart';
+
 
 class SignInUpSection extends StatelessWidget {
   const SignInUpSection({

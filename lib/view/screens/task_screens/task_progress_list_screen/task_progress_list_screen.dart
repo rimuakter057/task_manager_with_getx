@@ -20,7 +20,7 @@ class TaskProgressListScreen extends StatefulWidget {
 }
 
 class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
-  TaskListStatusModel? newListStatusModel;
+  TaskListStatusModel? taskListStatusModel;
   TaskModel taskModel = TaskModel();
   bool _getProgressTaskListInProgress    = false;
   bool _taskStatusInProgress = true;
@@ -45,18 +45,20 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
             child: ListView.builder(
                 shrinkWrap: true,
                 primary: false,
-                itemCount: newListStatusModel?.taskList?.length ?? 0,
+                itemCount: taskListStatusModel?.taskList?.length ?? 0,
                 itemBuilder: (context, index) {
                   return TaskItemWidget(
                     status: AppTexts.progress,
                     color: AppColors.purple,
-                    taskModel: newListStatusModel!.taskList![index],
-                    onTap: () {
-                      _deleteTask(newListStatusModel!.taskList![index].sId ?? '');
+                    taskModel: taskListStatusModel!.taskList![index],
+             /*       onTap: () {
+                      _deleteTask(taskListStatusModel!.taskList![index].sId ?? '');
                       setState(() {
 
                       });
-                    }, editOnTap: () {
+                    }, */
+                    onDeleteTask:_deleteTask ,
+                    editOnTap: () {
                     _buildShowDialog(context, index);
                   },
 
@@ -131,7 +133,7 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
                     }
                     print("alert dialog done");
                     _updateTaskStatus(
-                        newListStatusModel!.taskList![index].sId ??
+                        taskListStatusModel!.taskList![index].sId ??
                             '',
                         selectedValue ?? '');
                     Navigator.pop(context); // Close the dialog
@@ -157,7 +159,7 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
     await NetworkCaller.getRequest(url: Urls.taskStatusList(AppTexts.progress));
 
     if(response.isSuccess){
-      newListStatusModel =
+      taskListStatusModel =
           TaskListStatusModel.fromJson(response.responseData!);
       setState(() {
 
@@ -181,6 +183,15 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
 
   }
 
+  // delete task api function get x
+  /*Future<void> _deleteTask(String taskId) async {
+    final bool isSuccess = await _deleteNewTaskController.deleteTask(taskId);
+    if (isSuccess) {
+      showSnackBar("Task deleted successfully", context);
+    } else {
+      showSnackBar(_newTaskController.errorMessage!, context);
+    }
+  }*/
 
 
 
