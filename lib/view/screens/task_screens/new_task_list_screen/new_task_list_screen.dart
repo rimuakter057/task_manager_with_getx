@@ -11,6 +11,7 @@ import '../../../../utils/url.dart';
 import '../../../controller/delete_new_task_controller.dart';
 import '../../../controller/get_summary_status_controller.dart';
 import '../../../controller/new_task_list_controller.dart';
+import '../../../controller/task_controller/update_task_status_controller.dart';
 import '../../../widget/app_bar.dart';
 import '../../../widget/circular_indicator.dart';
 import '../../../widget/snack_bar_message.dart';
@@ -30,11 +31,11 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
   TaskListStatusModel? newListStatusModel;
   TaskCountStatusModel? taskCountStatusModel;
   bool _getTaskCountStatusInProgress = false;
-  bool _getNewTaskListInProgress = false;
-  bool _deleteInProgress = false;
+ // bool _getNewTaskListInProgress = false;
   bool _taskStatusInProgress = false;
   final NewTaskListController _newTaskController = Get.find<NewTaskListController>();
   final DeleteNewTaskController _deleteNewTaskController = Get.find<DeleteNewTaskController>();
+  final UpdateTaskStatusController _updateTaskStatusController = Get.find<UpdateTaskStatusController>();
   // final GetSummaryStatusController _getSummaryStatusController= Get.find<GetSummaryStatusController>();
   String? _selectedValue;
   List taskStatusList = [];
@@ -95,7 +96,7 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
              onDeleteTask:_deleteTask ,
               editOnTap: () {
                 debugPrint("on tap done");
-                _buildShowDialog(context, index);
+                _buildShowDialog(context, index,taskList);
               },
             );
           }),
@@ -103,11 +104,10 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
   }
 
   // Function to show the dialog
-  Future<dynamic> _buildShowDialog(BuildContext context, int index) {
+  Future<dynamic> _buildShowDialog(BuildContext context, int index,List <TaskModel>taskList) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        // Local variable to manage state inside the dialog
         String? selectedValue = _selectedValue;
         debugPrint("show dialog done");
         return StatefulBuilder(
@@ -159,15 +159,27 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
                 TextButton(
 
                   onPressed: () {
-                    if (selectedValue != null) {
-                      // Update the global value and close the dialog
-                      _selectedValue = selectedValue;
+                    if (selectedValue != null && selectedValue!.isNotEmpty)
+                    {
+                    //  _selectedValue = selectedValue;
+
+                      _updateTaskStatus(
+                          taskList[index].sId ?? '',/*
+                        newListStatusModel!.taskList![index].sId ??
+                            '',*/
+                          selectedValue ?? '');
+
+                    }
+                    else{
+                      showSnackBar("Please select a status!", context);
                     }
                     print("alert dialog done");
-                    _updateTaskStatus(
+
+                    /*_updateTaskStatus(
+                        taskList[index].sId ?? '',*//*
                         newListStatusModel!.taskList![index].sId ??
-                            '',
-                        selectedValue ?? '');
+                            '',*//*
+                        selectedValue ?? '');*/
                     Navigator.pop(context); // Close the dialog
                     print("close dialog done");
                   },
@@ -183,6 +195,8 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
       },
     );
   }
+
+
 
 // summary status ui
   Widget _buildTaskSummaryStatus() {
@@ -212,6 +226,53 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
     );
   }
 
+
+  // New summary List api function get x
+  Future<void> _getSummaryNewList() async {
+    final bool isSuccess = await _newTaskController.getSummaryNewList();
+    if (!isSuccess) {
+      showSnackBar(_newTaskController.errorMessage!, context);
+    }
+  }
+
+
+  // delete task api function get x
+  Future<void> _deleteTask(String taskId) async {
+    final bool isSuccess = await _deleteNewTaskController.deleteTask(taskId);
+    if (isSuccess) {
+      showSnackBar("Task deleted successfully", context);
+    } else {
+      showSnackBar(_newTaskController.errorMessage!, context);
+    }
+  }
+
+  // update task status api function get x
+  Future<void> _updateTaskStatus(String taskId, String status)async {
+    final bool isSuccess = await _updateTaskStatusController.updateTaskStatus(taskId, status);
+    if (isSuccess) {
+      Get.snackbar("update status", "Task status updated successfully", );
+    } else {
+      showSnackBar(_newTaskController.errorMessage!, context);
+    }
+  }
+
+
+  // update task status api function
+ /* Future<void> _updateTaskStatus(String taskId, String status) async {
+    _taskStatusInProgress = false;
+    setState(() {});
+    final response =
+    await NetworkCaller.getRequest(url: Urls.updateTask(taskId, status));
+    if (response.isSuccess) {
+      showSnackBar("Task status updated successfully", context);
+    } else {
+      showSnackBar('Task status updated failed', context);
+    }
+    _taskStatusInProgress = true;
+    setState(() {});
+  }*/
+
+
   // get summary status api function
   Future<void> _getSummaryStatus() async {
     _getTaskCountStatusInProgress = true;
@@ -238,39 +299,6 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
     }
   }*/
 
-  // New summary List api function get x
-  Future<void> _getSummaryNewList() async {
-    final bool isSuccess = await _newTaskController.getSummaryNewList();
-    if (!isSuccess) {
-      showSnackBar(_newTaskController.errorMessage!, context);
-    }
-  }
-
-
-  // delete task api function get x
-  Future<void> _deleteTask(String taskId) async {
-    final bool isSuccess = await _deleteNewTaskController.deleteTask(taskId);
-    if (isSuccess) {
-      showSnackBar("Task deleted successfully", context);
-    } else {
-      showSnackBar(_newTaskController.errorMessage!, context);
-    }
-  }
-
-  // update task status api function
-  Future<void> _updateTaskStatus(String taskId, String status) async {
-    _taskStatusInProgress = false;
-    setState(() {});
-    final response =
-    await NetworkCaller.getRequest(url: Urls.updateTask(taskId, status));
-    if (response.isSuccess) {
-      showSnackBar("Task status updated successfully", context);
-    } else {
-      showSnackBar('Task status updated failed', context);
-    }
-    _taskStatusInProgress = true;
-    setState(() {});
-  }
 
   //add task status in list
   Future<void> fetchTaskStatus() async {

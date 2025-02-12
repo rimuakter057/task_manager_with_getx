@@ -9,6 +9,7 @@ import '../../view/controller/recover_email_controller.dart';
 import '../../view/controller/recover_otp_controller.dart';
 import '../../view/controller/set_password_controller.dart';
 import '../../view/controller/signup_controller.dart';
+import '../../view/controller/task_controller/update_task_status_controller.dart';
 
 
 class ControllerBinding extends Bindings {
@@ -24,6 +25,7 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => RecoverOtpController());
     Get.lazyPut(() => SetPasswordController());
     Get.lazyPut(() => DeleteNewTaskController());
+    Get.lazyPut(() => UpdateTaskStatusController());
 
   }
 }
