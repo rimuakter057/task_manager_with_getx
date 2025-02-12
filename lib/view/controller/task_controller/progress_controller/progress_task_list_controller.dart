@@ -2,33 +2,32 @@
 import 'package:get/get.dart';
 import 'package:task_management_live_project/data/models/task_list/task_list_status_json_model.dart';
 import 'package:task_management_live_project/data/models/task_list/task_list_status_model.dart';
-import '../../data/service/network_caller.dart';
-import '../../utils/url.dart';
+import '../../../../data/service/network_caller.dart';
+import '../../../../utils/url.dart';
 
-class NewTaskListController extends GetxController {
-  bool _getNewTaskListInProgress = false;
-  bool get getNewTaskListInProgress=> _getNewTaskListInProgress;
+class ProgressTaskListController extends GetxController {
+  bool _getProgressTaskListInProgress = false;
+  bool get getProgressTaskListInProgress=> _getProgressTaskListInProgress;
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
   TaskListStatusModel? _taskListStatusModel;
   List <TaskModel> get taskList => _taskListStatusModel?.taskList ?? [];
-  Future<bool> getSummaryNewList() async {
+
+  Future<bool> getSummaryProgressList() async {
     bool isSuccess = false;
-    _getNewTaskListInProgress = true;
-   update();
+    _getProgressTaskListInProgress = true;
+    update();
     final NetworkResponse response =
-    await NetworkCaller.getRequest(url: Urls.taskStatusList('New'));
+    await NetworkCaller.getRequest(url: Urls.taskStatusList('Progress'));
     if (response.isSuccess) {
       _taskListStatusModel = TaskListStatusModel.fromJson(response.responseData!);
-     isSuccess = true;
+      isSuccess = true;
       _errorMessage = null;
     } else {
       _errorMessage = response.errorMessage;
     }
-    _getNewTaskListInProgress = false;
+    _getProgressTaskListInProgress = false;
     update();
     return isSuccess;
   }
 }
-
-

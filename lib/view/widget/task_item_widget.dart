@@ -5,7 +5,7 @@ import 'package:task_management_live_project/data/models/task_list/task_list_sta
 import '../../data/service/network_caller.dart';
 import '../../utils/colors.dart';
 import '../../utils/url.dart';
-import '../controller/delete_new_task_controller.dart';
+import '../controller/task_controller/new_controller/delete_new_task_controller.dart';
 
 class TaskItemWidget extends StatelessWidget {
 

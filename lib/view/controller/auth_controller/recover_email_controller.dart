@@ -5,10 +5,10 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../data/models/task_list/task_list_status_json_model.dart';
-import '../../data/models/task_list/task_list_status_model.dart';
-import '../../data/service/network_caller.dart';
-import '../../utils/url.dart';
+import '../../../data/models/task_list/task_list_status_json_model.dart';
+import '../../../data/models/task_list/task_list_status_model.dart';
+import '../../../data/service/network_caller.dart';
+import '../../../utils/url.dart';
 
 class RecoverEmailController extends GetxController {
   bool _recoveryEmailInProgress = false;

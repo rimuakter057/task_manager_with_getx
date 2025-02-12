@@ -7,7 +7,11 @@ import '../../../../data/models/task_list/task_list_status_model.dart';
 import '../../../../data/service/network_caller.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/url.dart';
+import '../../../controller/task_controller/completed_controller/completed_task_list_controller.dart';
+import '../../../controller/task_controller/completed_controller/delete_completed_task_controller.dart';
+import '../../../controller/task_controller/completed_controller/update_completed_task_status_controller.dart';
 import '../../../widget/app_bar.dart';
+import '../../../widget/circular_indicator.dart';
 import '../../../widget/snack_bar_message.dart';
 import '../../../widget/task_item_widget.dart';
 class TaskCompletedListScreen extends StatefulWidget {
@@ -23,7 +27,10 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
   TaskModel taskModel = TaskModel();
   bool _getCompletedTaskListInProgress    = false;
   bool _taskStatusInProgress = true;
- String? _selectedValue;
+  final CompletedTaskListController _completedTaskListController = Get.find<CompletedTaskListController>();
+  final DeleteCompletedTaskController _deleteCompletedTaskController = Get.find<DeleteCompletedTaskController>();
+  final UpdateCompletedTaskStatusController _updateCompletedTaskStatusController = Get.find<UpdateCompletedTaskStatusController>();
+  String? _selectedValue;
   List taskStatusList = [];
   @override
   void initState() {
@@ -40,36 +47,49 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
       body: Column(
         children: [
 
-          Expanded(
-            child: ListView.builder(
-                shrinkWrap: true,
-                primary: false,
-                itemCount: taskListStatusModel?.taskList?.length ?? 0,
-                itemBuilder: (context, index) {
-                  return TaskItemWidget(
-                   // status: newListStatusModel!.taskList![index].status ?? '',
-                    status: 'Completed',
-                    color: AppColors.green,
-                    taskModel: taskListStatusModel!.taskList![index],
-                 /*   onTap: () {
-                      _deleteTask(taskListStatusModel!.taskList![index].sId ?? '');
-                      setState(() {
-
-                      });
-                    },*/
-                    onDeleteTask:_deleteTask ,
-                    editOnTap: () {
-                    _buildShowDialog(context, index);
-                  },
-                  //  onUpdateTaskStatus: (String taskId, String newStatus) {  },
-                    /*editOnTap: () {  },*/
-                  );
-                }),
+          GetBuilder<CompletedTaskListController>(
+              builder: (controller) {
+                return Visibility(
+                  visible:controller.getCompletedTaskListInProgress == false,
+                  replacement: const CircularIndicator(),
+                  child: _buildTaskListView(controller.taskList),
+                );
+              }
           ),
         ],
       ),
     );
   }
+
+  Widget _buildTaskListView(List <TaskModel>taskList) {
+    return Expanded(
+      child: ListView.builder(
+          shrinkWrap: true,
+          primary: false,
+          itemCount:taskList.length,
+          itemBuilder: (context, index) {
+            return TaskItemWidget(
+              status: 'Completed',
+              color: AppColors.primaryColor,
+              taskModel: taskList[index],
+              /*   onTap: () {
+                          _deleteTask(taskListStatusModel!.taskList![index].sId ?? '');
+                          setState(() {
+
+                          });
+                        },*/
+              onDeleteTask:_deleteTask ,
+              editOnTap: () {
+                _buildShowDialog(context, index);
+              },
+
+            );
+          }),
+    );
+  }
+
+
+
   // Function to show the dialog
   Future<dynamic> _buildShowDialog(BuildContext context, int index) {
     return showDialog(
@@ -154,7 +174,7 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
   }
 
   // completed summary List api function
-  Future<void> _getSummaryCompletedList() async {
+  /*Future<void> _getSummaryCompletedList() async {
     _getCompletedTaskListInProgress      = true;
     setState(() {});
     final NetworkResponse response =
@@ -171,10 +191,18 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
     }
     _getCompletedTaskListInProgress   = false;
     setState(() {});
+  }*/
+
+  // completed summary List api function get x
+  Future<void> _getSummaryCompletedList() async {
+    final bool isSuccess = await  _completedTaskListController.getSummaryCompletedList();
+    if (!isSuccess) {
+      showSnackBar( _completedTaskListController.errorMessage!, context);
+    }
   }
 
   // delete task api function
-  Future<void> _deleteTask(String taskId) async {
+/*  Future<void> _deleteTask(String taskId) async {
     final NetworkResponse response =
     await NetworkCaller.getRequest(url: Urls.deleteTask(taskId));
     if (response.isSuccess) {
@@ -183,17 +211,17 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
       debugPrint("fail");
     }
 
-  }
+  }*/
 
-/*  // delete task api function get x
+  // delete task api function get x
   Future<void> _deleteTask(String taskId) async {
-    final bool isSuccess = await _deleteNewTaskController.deleteTask(taskId);
+    final bool isSuccess = await _deleteCompletedTaskController.deleteTask(taskId);
     if (isSuccess) {
       showSnackBar("Task deleted successfully", context);
     } else {
-      showSnackBar(_newTaskController.errorMessage!, context);
+      showSnackBar(_deleteCompletedTaskController.errorMessage!, context);
     }
-  }*/
+  }
 
 
 
@@ -232,7 +260,7 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
   }
 
 // update task status api function
-  Future<void> _updateTaskStatus(String taskId, String status) async {
+/*  Future<void> _updateTaskStatus(String taskId, String status) async {
     _taskStatusInProgress = false;
     setState(() {});
     final response =
@@ -244,5 +272,14 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
     }
     _taskStatusInProgress = true;
     setState(() {});
+  }*/
+  // update task status api function get x
+  Future<void> _updateTaskStatus(String taskId, String status)async {
+    final bool isSuccess = await _updateCompletedTaskStatusController.updateTaskStatus(taskId, status);
+    if (isSuccess) {
+      Get.snackbar("update status", "Task status updated successfully", );
+    } else {
+      showSnackBar(_updateCompletedTaskStatusController.errorMessage!, context);
+    }
   }
 }

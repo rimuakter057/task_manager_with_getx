@@ -6,7 +6,7 @@ import 'package:get/get_common/get_reset.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:task_management_live_project/data/service/network_caller.dart';
 import 'package:task_management_live_project/utils/colors.dart';
-import 'package:task_management_live_project/view/controller/sign_in_controller.dart';
+import 'package:task_management_live_project/view/controller/auth_controller/sign_in_controller.dart';
 import 'package:task_management_live_project/view/screens/task_screens/nav_screen/nav_screen.dart';
 
 import '../../../../data/models/user_model.dart';

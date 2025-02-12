@@ -3,8 +3,8 @@
 
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
-import '../../data/service/network_caller.dart';
-import '../../utils/url.dart';
+import '../../../data/service/network_caller.dart';
+import '../../../utils/url.dart';
 
 class SignUpController extends GetxController {
   bool _signUpProgress = false;

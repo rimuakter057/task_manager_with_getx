@@ -8,10 +8,10 @@ import 'package:task_management_live_project/view/widget/screen_background.dart'
 import '../../../../data/models/task_count/task_count_json_model.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/url.dart';
-import '../../../controller/delete_new_task_controller.dart';
+import '../../../controller/task_controller/new_controller/delete_new_task_controller.dart';
 import '../../../controller/get_summary_status_controller.dart';
-import '../../../controller/new_task_list_controller.dart';
-import '../../../controller/task_controller/update_task_status_controller.dart';
+import '../../../controller/task_controller/new_controller/new_task_list_controller.dart';
+import '../../../controller/task_controller/new_controller/update_new_task_status_controller.dart';
 import '../../../widget/app_bar.dart';
 import '../../../widget/circular_indicator.dart';
 import '../../../widget/snack_bar_message.dart';
@@ -35,6 +35,7 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
   bool _taskStatusInProgress = false;
   final NewTaskListController _newTaskController = Get.find<NewTaskListController>();
   final DeleteNewTaskController _deleteNewTaskController = Get.find<DeleteNewTaskController>();
+
   final UpdateTaskStatusController _updateTaskStatusController = Get.find<UpdateTaskStatusController>();
   // final GetSummaryStatusController _getSummaryStatusController= Get.find<GetSummaryStatusController>();
   String? _selectedValue;
@@ -242,7 +243,7 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
     if (isSuccess) {
       showSnackBar("Task deleted successfully", context);
     } else {
-      showSnackBar(_newTaskController.errorMessage!, context);
+      showSnackBar(_deleteNewTaskController.errorMessage!, context);
     }
   }
 

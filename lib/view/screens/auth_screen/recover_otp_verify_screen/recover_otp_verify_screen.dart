@@ -6,7 +6,7 @@ import 'package:task_management_live_project/utils/app_text.dart';
 import '../../../../data/service/network_caller.dart';
 import '../../../../utils/styles.dart';
 import '../../../../utils/url.dart';
-import '../../../controller/recover_otp_controller.dart';
+import '../../../controller/auth_controller/recover_otp_controller.dart';
 import '../../../widget/circular_indicator.dart';
 import '../../../widget/sign_in_up_section.dart';
 import '../../../widget/snack_bar_message.dart';

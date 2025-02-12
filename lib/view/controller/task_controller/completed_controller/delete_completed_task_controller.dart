@@ -2,12 +2,12 @@
 
   import 'package:get/get.dart';
 
-import '../../data/models/task_list/task_list_status_json_model.dart';
-import '../../data/models/task_list/task_list_status_model.dart';
-import '../../data/service/network_caller.dart';
-import '../../utils/url.dart';
+import '../../../../data/models/task_list/task_list_status_json_model.dart';
+import '../../../../data/models/task_list/task_list_status_model.dart';
+import '../../../../data/service/network_caller.dart';
+import '../../../../utils/url.dart';
 
-class DeleteNewTaskController extends GetxController {
+class DeleteCompletedTaskController extends GetxController {
   String? _errorMessage ;
   String? get errorMessage => _errorMessage;
   TaskListStatusModel? _taskListStatusModel;

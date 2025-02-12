@@ -1,11 +1,11 @@
 
 
 import 'package:get/get.dart';
-import '../../data/controllers/auth_controller.dart';
-import '../../data/models/user_model.dart';
-import '../../data/service/network_caller.dart';
-import '../../utils/url.dart';
-import '../screens/task_screens/nav_screen/nav_screen.dart';
+import '../../../data/controllers/auth_controller.dart';
+import '../../../data/models/user_model.dart';
+import '../../../data/service/network_caller.dart';
+import '../../../utils/url.dart';
+import '../../screens/task_screens/nav_screen/nav_screen.dart';
 
 class SignInController extends GetxController {
   bool _signInProgress = false;

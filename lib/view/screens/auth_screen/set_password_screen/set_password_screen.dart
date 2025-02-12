@@ -10,7 +10,7 @@ import 'package:task_management_live_project/view/widget/snack_bar_message.dart'
 import '../../../../utils/app_text.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/url.dart';
-import '../../../controller/set_password_controller.dart';
+import '../../../controller/auth_controller/set_password_controller.dart';
 import '../../../widget/sign_in_up_section.dart';
 import '../signIn_screen/signIn_screen.dart';
 

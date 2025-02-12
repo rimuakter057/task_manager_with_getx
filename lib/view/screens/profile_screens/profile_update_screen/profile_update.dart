@@ -6,7 +6,7 @@ import '../../../../data/controllers/auth_controller.dart';
 import '../../../../data/service/network_caller.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/url.dart';
-import '../../../controller/update_profile_controller.dart';
+import '../../../controller/profile_controller/update_profile_controller.dart';
 import '../../../widget/circular_indicator.dart';
 import '../../../widget/snack_bar_message.dart';
 

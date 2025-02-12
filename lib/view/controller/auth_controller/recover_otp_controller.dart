@@ -3,10 +3,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../data/service/network_caller.dart';
-import '../../utils/app_text.dart';
-import '../../utils/url.dart';
-import '../widget/snack_bar_message.dart';
+import '../../../data/service/network_caller.dart';
+import '../../../utils/app_text.dart';
+import '../../../utils/url.dart';
+import '../../widget/snack_bar_message.dart';
 
 class RecoverOtpController extends GetxController {
   bool _recoveryOtpInProgress = false;
