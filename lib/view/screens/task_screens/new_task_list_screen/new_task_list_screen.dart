@@ -31,13 +31,12 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
   TaskListStatusModel? newListStatusModel;
   TaskCountStatusModel? taskCountStatusModel;
   bool _getTaskCountStatusInProgress = false;
- // bool _getNewTaskListInProgress = false;
   bool _taskStatusInProgress = false;
   final NewTaskListController _newTaskController = Get.find<NewTaskListController>();
   final DeleteNewTaskController _deleteNewTaskController = Get.find<DeleteNewTaskController>();
 
   final UpdateTaskStatusController _updateTaskStatusController = Get.find<UpdateTaskStatusController>();
-  // final GetSummaryStatusController _getSummaryStatusController= Get.find<GetSummaryStatusController>();
+   final GetSummaryCountStatusController _getSummaryCountStatusController= Get.find<GetSummaryCountStatusController>();
   String? _selectedValue;
   List taskStatusList = [];
 
@@ -46,13 +45,16 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _fetchAllDataSequence();
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchAllDataSequence();
+    });
   }//
+
+
 
   Future<void> _fetchAllDataSequence() async {
     try {
-      await  _getSummaryStatus();
+      await  _getSummaryCountStatus() ;
       await _getSummaryNewList();
     } catch (e) {
       showSnackBar('Error fetching tasks: $e', context);
@@ -68,7 +70,10 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
           children: [
-            _buildTaskSummaryStatus(),
+
+            _buildTaskSummaryStatus(_getSummaryCountStatusController.taskCountStatusList),
+
+
             GetBuilder<NewTaskListController>(
               builder: (controller) {
                 return Visibility(
@@ -83,6 +88,99 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
     );
   }
 
+  // ui part======================
+
+  // summary status ui
+  Widget _buildTaskSummaryStatus(List<TaskCountModel> taskCountStatusModel) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if(_getSummaryCountStatusController.taskCountStatusList.isNotEmpty){
+        _getSummaryCountStatusController.getSummaryCountStatus;
+      }
+    });
+
+    return GetBuilder<GetSummaryCountStatusController>(
+      builder: (controller) {
+        return Visibility(
+          visible: controller.taskStatusInProgress == false,
+          replacement: CircularProgressIndicator(
+            color: AppColors.primaryColor,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: taskCountStatusModel.length,
+               // itemCount: taskCountStatusModel?.taskByStatusList?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final TaskCountModel model =
+                  taskCountStatusModel[index];
+                //  taskCountStatusModel!.taskByStatusList![index];
+                  return TaskStatusSummaryCounterWidget(
+                    title: model.sId ?? '',
+                    count: model.sum.toString(),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      }
+    );
+  }
+
+  // get summary status api function
+/*  Future<void> _getSummaryStatus() async {
+    _getTaskCountStatusInProgress = true;
+    setState(() {});
+    final NetworkResponse response =
+    await NetworkCaller.getRequest(url: Urls.taskStatusCount);
+
+    if (response.isSuccess) {
+      taskCountStatusModel =
+          TaskCountStatusModel.fromJson(response.responseData!);
+      setState(() {});
+    } else {
+      showSnackBar(response.errorMessage, context);
+    }
+    _getTaskCountStatusInProgress = false;
+    setState(() {});
+  }*/
+
+  // summary status ui
+ /* Widget _buildTaskSummaryStatus() {
+    return GetBuilder<GetSummaryCountStatusController>(
+      builder: (controller) {
+        return Visibility(
+          visible:controller.taskStatusInProgress == false,
+          replacement: CircularProgressIndicator(
+            color: AppColors.primaryColor,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: taskCountStatusModel?.taskByStatusList?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final TaskCountModel model =
+                  taskCountStatusModel!.taskByStatusList![index];
+                  return TaskStatusSummaryCounterWidget(
+                    title: model.sId ?? '',
+                    count: model.sum.toString(),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      }
+    );
+  }*/
+
+  // task list view
  Widget _buildTaskListview(List <TaskModel>taskList) {
     return Expanded(
       child: ListView.builder(
@@ -104,16 +202,14 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
     );
   }
 
-  // Function to show the dialog
+  // update status to show the dialog
   Future<dynamic> _buildShowDialog(BuildContext context, int index,List <TaskModel>taskList) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         String? selectedValue = _selectedValue;
-        debugPrint("show dialog done");
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            debugPrint("Stateful builder done");
             return AlertDialog(
               title: const Text('Update Task Status'),
               content: DropdownButtonFormField<String>(
@@ -162,25 +258,15 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
                   onPressed: () {
                     if (selectedValue != null && selectedValue!.isNotEmpty)
                     {
-                    //  _selectedValue = selectedValue;
-
                       _updateTaskStatus(
-                          taskList[index].sId ?? '',/*
-                        newListStatusModel!.taskList![index].sId ??
-                            '',*/
+                          taskList[index].sId ?? '',
                           selectedValue ?? '');
 
                     }
                     else{
                       showSnackBar("Please select a status!", context);
                     }
-                    print("alert dialog done");
 
-                    /*_updateTaskStatus(
-                        taskList[index].sId ?? '',*//*
-                        newListStatusModel!.taskList![index].sId ??
-                            '',*//*
-                        selectedValue ?? '');*/
                     Navigator.pop(context); // Close the dialog
                     print("close dialog done");
                   },
@@ -197,85 +283,10 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
     );
   }
 
-
-
-// summary status ui
-  Widget _buildTaskSummaryStatus() {
-    return Visibility(
-      visible: _taskStatusInProgress == false,
-      replacement: CircularProgressIndicator(
-        color: AppColors.primaryColor,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          height: 100,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: taskCountStatusModel?.taskByStatusList?.length ?? 0,
-            itemBuilder: (context, index) {
-              final TaskCountModel model =
-              taskCountStatusModel!.taskByStatusList![index];
-              return TaskStatusSummaryCounterWidget(
-                title: model.sId ?? '',
-                count: model.sum.toString(),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-
-  // New summary List api function get x
-  Future<void> _getSummaryNewList() async {
-    final bool isSuccess = await _newTaskController.getSummaryNewList();
-    if (!isSuccess) {
-      showSnackBar(_newTaskController.errorMessage!, context);
-    }
-  }
-
-
-  // delete task api function get x
-  Future<void> _deleteTask(String taskId) async {
-    final bool isSuccess = await _deleteNewTaskController.deleteTask(taskId);
-    if (isSuccess) {
-      showSnackBar("Task deleted successfully", context);
-    } else {
-      showSnackBar(_deleteNewTaskController.errorMessage!, context);
-    }
-  }
-
-  // update task status api function get x
-  Future<void> _updateTaskStatus(String taskId, String status)async {
-    final bool isSuccess = await _updateTaskStatusController.updateTaskStatus(taskId, status);
-    if (isSuccess) {
-      Get.snackbar("update status", "Task status updated successfully", );
-    } else {
-      showSnackBar(_newTaskController.errorMessage!, context);
-    }
-  }
-
-
-  // update task status api function
- /* Future<void> _updateTaskStatus(String taskId, String status) async {
-    _taskStatusInProgress = false;
-    setState(() {});
-    final response =
-    await NetworkCaller.getRequest(url: Urls.updateTask(taskId, status));
-    if (response.isSuccess) {
-      showSnackBar("Task status updated successfully", context);
-    } else {
-      showSnackBar('Task status updated failed', context);
-    }
-    _taskStatusInProgress = true;
-    setState(() {});
-  }*/
-
+  // function part===============
 
   // get summary status api function
-  Future<void> _getSummaryStatus() async {
+/*  Future<void> _getSummaryCountStatus() async {
     _getTaskCountStatusInProgress = true;
     setState(() {});
     final NetworkResponse response =
@@ -290,15 +301,15 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
     }
     _getTaskCountStatusInProgress = false;
     setState(() {});
-  }
+  }*/
 
   // get summary status api function get x
-/*  Future<void> _getSummaryStatus()  async {
-    final bool isSuccess = await _getSummaryStatusController.getSummaryStatus();
+  Future<void> _getSummaryCountStatus() async {
+    final bool isSuccess = await _getSummaryCountStatusController.getSummaryCountStatus();
     if (!isSuccess) {
-      showSnackBar(_getSummaryStatusController.errorMessage!, context);
+      Get.snackbar('Error', _getSummaryCountStatusController.errorMessage!);
     }
-  }*/
+  }
 
 
   //add task status in list
@@ -316,6 +327,7 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
     }
   }
 
+
   //get task status api function
   Future<List<TaskModel>> _getTaskStatus() async {
     final NetworkResponse response = await NetworkCaller.getRequest(
@@ -327,6 +339,29 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
       throw Exception(response.errorMessage);
     }
   }
-
-
+  // New summary List api function get x
+  Future<void> _getSummaryNewList() async {
+    final bool isSuccess = await _newTaskController.getSummaryNewList();
+    if (!isSuccess) {
+      showSnackBar(_newTaskController.errorMessage!, context);
+    }
+  }
+  // update task status api function get x
+  Future<void> _updateTaskStatus(String taskId, String status)async {
+    final bool isSuccess = await _updateTaskStatusController.updateTaskStatus(taskId, status);
+    if (isSuccess) {
+      Get.snackbar("update status", "Task status updated successfully", );
+    } else {
+      showSnackBar(_newTaskController.errorMessage!, context);
+    }
+  }
+  // delete task api function get x
+  Future<void> _deleteTask(String taskId) async {
+    final bool isSuccess = await _deleteNewTaskController.deleteTask(taskId);
+    if (isSuccess) {
+      showSnackBar("Task deleted successfully", context);
+    } else {
+      showSnackBar(_deleteNewTaskController.errorMessage!, context);
+    }
+  }
 }

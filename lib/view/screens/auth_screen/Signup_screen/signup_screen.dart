@@ -30,7 +30,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _mobileNumberController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-   bool _signUpProgress=false;
+
 
   final SignUpController _signUpController = Get.find<SignUpController>();
 
@@ -183,7 +183,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
    }
 
 //signup api function
-  Future <void> _registerUser()async{
+  Future<void> _registerUser()async{
      final bool isSuccess= await _signUpController.registerUser(
        _emailController.text.trim(),
        _firstNameController.text.trim(),
@@ -193,11 +193,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
      );
     if (isSuccess) {
       _clearTextField();
-    showSnackBar("Sign Up Successfully", context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.success,"Sign Up Successfully" ,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+
+
       Get.offAllNamed(SignInScreen.routeName);
       // Navigator.pushNamed(context, SignInScreen.routeName);
     }else{
-      return showSnackBar(_signUpController.errorMessage!, context,);
+      return showSnackBar(_signUpController.errorMessage!, context);
+
     }
   }
 

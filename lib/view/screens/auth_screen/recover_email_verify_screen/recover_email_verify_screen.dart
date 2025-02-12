@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management_live_project/data/service/network_caller.dart';
 import 'package:task_management_live_project/utils/app_text.dart';
 import 'package:task_management_live_project/view/widget/circular_indicator.dart';
+import '../../../../utils/colors.dart';
 import '../../../../utils/url.dart';
 import '../../../controller/auth_controller/recover_email_controller.dart';
 import '../../../widget/sign_in_up_section.dart';
@@ -110,8 +111,21 @@ class _RecoverEmailVerifyScreenState extends State<RecoverEmailVerifyScreen> {
         .recoverVerifyEmail(_emailController);
     if(isSuccess){
       Get.toNamed(  RecoverOtpVerifyScreen.routeName);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.success,"update successful" ,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
    else if(!isSuccess){
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.emailError,
+        "update successful" ,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
       showSnackBar(AppTexts.emailError, context);
     }
   }

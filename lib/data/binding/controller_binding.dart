@@ -29,7 +29,7 @@ class ControllerBinding extends Bindings {
     Get.lazyPut(() => UpdateProfileController());
     Get.lazyPut(() =>  CreateTaskController());
     Get.put(NewTaskListController());
-    Get.put(GetSummaryStatusController ());
+    Get.put(GetSummaryCountStatusController());
     Get.lazyPut(() => RecoverEmailController());
     Get.lazyPut(() => RecoverOtpController());
     Get.lazyPut(() => SetPasswordController());

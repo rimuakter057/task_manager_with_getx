@@ -1,13 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:task_management_live_project/utils/app_text.dart';
-
 import '../../../../data/models/task_list/task_list_status_json_model.dart';
 import '../../../../data/models/task_list/task_list_status_model.dart';
-import '../../../../data/service/network_caller.dart';
 import '../../../../utils/colors.dart';
-import '../../../../utils/url.dart';
 import '../../../controller/task_controller/new_controller/update_new_task_status_controller.dart';
 import '../../../controller/task_controller/progress_controller/delete_progress_task_controller.dart';
 import '../../../controller/task_controller/progress_controller/progress_task_list_controller.dart';
@@ -26,8 +22,6 @@ class TaskProgressListScreen extends StatefulWidget {
 class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
   TaskListStatusModel? taskListStatusModel;
   TaskModel taskModel = TaskModel();
-  bool _getProgressTaskListInProgress    = false;
-  bool _taskStatusInProgress = true;
   final ProgressTaskListController _progressTaskListController = Get.find<ProgressTaskListController>();
   final DeleteProgressTaskController _deleteProgressTaskController = Get.find<DeleteProgressTaskController>();
   final UpdateTaskStatusController _updateProgressTaskStatusController = Get.find<UpdateTaskStatusController>();
@@ -37,7 +31,6 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getTaskStatus();
     _getSummaryProgressList();
   }
 
@@ -48,7 +41,6 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
       appBar: const AppBarWidget(),
       body: Column(
         children: [
-
           GetBuilder<ProgressTaskListController>(
               builder: (controller) {
                 return Visibility(
@@ -63,6 +55,9 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
     );
   }
 
+  // ui part==================
+
+  //progress task list
   Widget _buildTaskListView(List <TaskModel>taskList) {
     return Expanded(
       child: ListView.builder(
@@ -74,30 +69,20 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
               status: 'Canceled',
               color: AppColors.primaryColor,
               taskModel: taskList[index],
-              /*   onTap: () {
-                          _deleteTask(taskListStatusModel!.taskList![index].sId ?? '');
-                          setState(() {
-
-                          });
-                        },*/
               onDeleteTask:_deleteTask ,
               editOnTap: () {
-                _buildShowDialog(context, index);
+                _buildShowDialog(context, index,taskList);
               },
 
             );
           }),
     );
   }
-
-
-
-  // Function to show the dialog
-  Future<dynamic> _buildShowDialog(BuildContext context, int index) {
+// update task status dialog
+  Future<dynamic> _buildShowDialog(BuildContext context, int index,List <TaskModel>taskList) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        // Local variable to manage state inside the dialog
         String? selectedValue = _selectedValue;
         debugPrint("show dialog done");
         return StatefulBuilder(
@@ -138,9 +123,8 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Get.back();
-                  /*  Navigator.pop(
-                        context);*/ // Close the dialog without saving
+                    Navigator.pop(
+                        context); // Close the dialog without saving
                   },
                   child: const Text(
                     'Cancel',
@@ -150,15 +134,27 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
                 TextButton(
 
                   onPressed: () {
-                    if (selectedValue != null) {
-                      // Update the global value and close the dialog
-                      _selectedValue = selectedValue;
+                    if (selectedValue != null && selectedValue!.isNotEmpty)
+                    {
+                      //  _selectedValue = selectedValue;
+
+                      _updateTaskStatus(
+                          taskList[index].sId ?? '',/*
+                        newListStatusModel!.taskList![index].sId ??
+                            '',*/
+                          selectedValue ?? '');
+
+                    }
+                    else{
+                      showSnackBar("Please select a status!", context);
                     }
                     print("alert dialog done");
-                    _updateTaskStatus(
-                        taskListStatusModel!.taskList![index].sId ??
-                            '',
-                        selectedValue ?? '');
+
+                    /*_updateTaskStatus(
+                        taskList[index].sId ?? '',*//*
+                        newListStatusModel!.taskList![index].sId ??
+                            '',*//*
+                        selectedValue ?? '');*/
                     Navigator.pop(context); // Close the dialog
                     print("close dialog done");
                   },
@@ -174,26 +170,9 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
       },
     );
   }
-  // completed summary List api function
- /* Future<void> _getSummaryProgressList() async {
-    _getProgressTaskListInProgress      = true;
-    setState(() {});
-    final NetworkResponse response =
-    await NetworkCaller.getRequest(url: Urls.taskStatusList(AppTexts.progress));
 
-    if(response.isSuccess){
-      taskListStatusModel =
-          TaskListStatusModel.fromJson(response.responseData!);
-      setState(() {
 
-      });
-    }else{
-      showSnackBar(response.errorMessage, context);
-    }
-    _getProgressTaskListInProgress   = false;
-    setState(() {});
-  }*/
-
+  //function part==============
 
   // canceled summary List api function get x
   Future<void> _getSummaryProgressList() async {
@@ -202,22 +181,6 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
       showSnackBar(_progressTaskListController.errorMessage!, context);
     }
   }
-
-
-
-
-  // delete task api function
-/*  Future<void> _deleteTask(String taskId) async {
-    final NetworkResponse response =
-    await NetworkCaller.getRequest(url: Urls.deleteTask(taskId));
-    if (response.isSuccess) {
-      debugPrint("success");
-    }else{
-      debugPrint("fail");
-    }
-
-  }*/
-
   // delete task api function get x
   Future<void> _deleteTask(String taskId) async {
     final bool isSuccess = await _deleteProgressTaskController.deleteTask(taskId);
@@ -227,56 +190,6 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
       showSnackBar(_deleteProgressTaskController.errorMessage!, context);
     }
   }
-
-
-
-
-
-
-
-
-  //add task status in list
-  Future<void> fetchTaskStatus() async {
-    try {
-      taskStatusList = await _getTaskStatus();
-      setState(() {
-        _taskStatusInProgress = false;
-      });
-    } catch (e) {
-      setState(() {
-        _taskStatusInProgress = false;
-      });
-      showSnackBar('Error fetching tasks: $e', context);
-    }
-  }
-
-  //get task status api function
-  Future<List<TaskModel>> _getTaskStatus() async {
-    final NetworkResponse response = await NetworkCaller.getRequest(
-        url: Urls.taskStatusList('New'));
-    if (response.isSuccess) {
-      final List<dynamic> data = response.responseData?['data'] ?? [];
-      return data.map((task) => TaskModel.fromJson(task)).toList();
-    } else {
-      throw Exception(response.errorMessage);
-    }
-  }
-
-// update task status api function
-/*  Future<void> _updateTaskStatus(String taskId, String status) async {
-    _taskStatusInProgress = false;
-    setState(() {});
-    final response =
-    await NetworkCaller.getRequest(url: Urls.updateTask(taskId, status));
-    if (response.isSuccess) {
-      showSnackBar("Task status updated successfully", context);
-    } else {
-      showSnackBar('Task status updated failed', context);
-    }
-    _taskStatusInProgress = true;
-    setState(() {});
-  }*/
-
   // update task status api function get x
   Future<void> _updateTaskStatus(String taskId, String status)async {
     final bool isSuccess = await _updateProgressTaskStatusController.updateTaskStatus(taskId, status);
@@ -286,5 +199,4 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
       showSnackBar(_updateProgressTaskStatusController.errorMessage!, context);
     }
   }
-
 }

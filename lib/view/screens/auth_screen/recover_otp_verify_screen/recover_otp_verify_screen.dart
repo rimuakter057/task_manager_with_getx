@@ -4,6 +4,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management_live_project/utils/app_text.dart';
 import '../../../../data/service/network_caller.dart';
+import '../../../../utils/colors.dart';
 import '../../../../utils/styles.dart';
 import '../../../../utils/url.dart';
 import '../../../controller/auth_controller/recover_otp_controller.dart';
@@ -109,9 +110,21 @@ class _RecoverOtpVerifyScreenState extends State<RecoverOtpVerifyScreen> {
 
     if(isSuccess){
       Get.toNamed(  SetPasswordScreen.routeName);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.success,"update successful" ,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
     else if(!isSuccess){
       showSnackBar(AppTexts.otpFailed, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.otpFailed,"update successful" ,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 

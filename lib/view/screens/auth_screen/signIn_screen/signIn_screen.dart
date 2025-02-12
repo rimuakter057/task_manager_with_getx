@@ -1,4 +1,3 @@
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,10 +17,6 @@ import '../../../widget/snack_bar_message.dart';
 import '../Signup_screen/signup_screen.dart';
 import '../recover_email_verify_screen/recover_email_verify_screen.dart';
 
-
-
-
-
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
@@ -40,7 +35,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     final titleStyle = Theme.of(context).textTheme.titleLarge;
-    final bodySmallStyle=Theme.of(context).textTheme.bodySmall;
+    final bodySmallStyle = Theme.of(context).textTheme.bodySmall;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -50,8 +45,8 @@ class _SignInScreenState extends State<SignInScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-               AppTexts.signInHeadline,
-                style:titleStyle,
+                AppTexts.signInHeadline,
+                style: titleStyle,
               ),
 
               const SizedBox(
@@ -61,19 +56,21 @@ class _SignInScreenState extends State<SignInScreen> {
               const SizedBox(
                 height: 10,
               ),
-              TextButton(onPressed: (){
-                Get.toNamed(RecoverEmailVerifyScreen .routeName);
-               // Navigator.pushNamed(context, ForgetEmailVerifyScreen.routeName);
-              },
-                child: Text(AppTexts.forgotPass,style: bodySmallStyle
-                ),
+              TextButton(
+                onPressed: () {
+                  Get.toNamed(RecoverEmailVerifyScreen.routeName);
+                  // Navigator.pushNamed(context, ForgetEmailVerifyScreen.routeName);
+                },
+                child: Text(AppTexts.forgotPass, style: bodySmallStyle),
               ),
               //sign up text section
-              SignInUpSection(context: context,text: AppTexts.signUp,
-              onTap:(){
-                Get.offAll( const SignUpScreen());
-               // Navigator.pushNamedAndRemoveUntil(context, SignUpScreen.routeName, (_) => false);
-              },
+              SignInUpSection(
+                context: context,
+                text: AppTexts.signUp,
+                onTap: () {
+                  Get.offAll(const SignUpScreen());
+                  // Navigator.pushNamedAndRemoveUntil(context, SignUpScreen.routeName, (_) => false);
+                },
               )
             ],
           ),
@@ -83,16 +80,27 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
 // sign in on tap
-  void _signInOnTap(){
-    if(_formKey.currentState!.validate()){
+  void _signInOnTap() {
+    if (_formKey.currentState!.validate()) {
       _signInUser();
-  //  showSnackBar(AppTexts.success, context);
-
-
-    }else{
-      showSnackBar(AppTexts.failed, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.success,
+        "update successful",
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } else {
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.failed,
+        "Sign in failed",
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
+
   //sign in form
   Form _buildTextForm(BuildContext context) {
     return Form(
@@ -106,9 +114,10 @@ class _SignInScreenState extends State<SignInScreen> {
               hintText: AppTexts.emailHint,
             ),
             validator: (String? value) {
-              if(value?.trim().isEmpty??true){
+              if (value?.trim().isEmpty ?? true) {
                 return AppTexts.emailError;
-              }return null;
+              }
+              return null;
             },
           ),
           const SizedBox(
@@ -121,9 +130,10 @@ class _SignInScreenState extends State<SignInScreen> {
               hintText: AppTexts.passwordHint,
             ),
             validator: (String? value) {
-              if(value?.trim().isEmpty??true){
+              if (value?.trim().isEmpty ?? true) {
                 return AppTexts.passwordError;
-              }if(value!.length<6){
+              }
+              if (value!.length < 6) {
                 return "password must be at least 6 characters";
               }
               return null;
@@ -132,54 +142,46 @@ class _SignInScreenState extends State<SignInScreen> {
           const SizedBox(
             height: 50,
           ),
-
-          GetBuilder<SignInController>(
-            builder: (controller) {
-              return Visibility(
-                visible:controller. signInProgress==false,
-                replacement: Center(child: CircularProgressIndicator(
+          GetBuilder<SignInController>(builder: (controller) {
+            return Visibility(
+              visible: controller.signInProgress == false,
+              replacement: Center(
+                child: CircularProgressIndicator(
                   color: AppColors.primaryColor,
-                ),),
-                child: ElevatedButton(
-                  onPressed: _signInOnTap,
-                  child:  const Text( AppTexts.signIn,
-                  ),
                 ),
-              );
-            }
-          ),
-
-
-
+              ),
+              child: ElevatedButton(
+                onPressed: _signInOnTap,
+                child: const Text(
+                  AppTexts.signIn,
+                ),
+              ),
+            );
+          }),
         ],
       ),
     );
   }
-  // sign api function
-  Future <void> _signInUser()async{
-final bool isSuccess =await _signInController.signInUser(
-    _emailController.text.trim(),
-    _passwordController.text);
- if (isSuccess) {
 
+  // sign api function
+  Future<void> _signInUser() async {
+    final bool isSuccess = await _signInController.signInUser(
+        _emailController.text.trim(), _passwordController.text);
+    if (isSuccess) {
       Get.offAll(const NavScreen());
       //  Navigator.pushNamedAndRemoveUntil(context,  NavScreen.routeName,  (_) => false);
 
-_clearTextField();
-    }else{
-showSnackBar(_signInController.errorMessage!, context);
+      _clearTextField();
+    } else {
+      showSnackBar(_signInController.errorMessage!, context);
     }
   }
 
-
-
   //clear text field
-  void _clearTextField(){
+  void _clearTextField() {
     _emailController.clear();
     _passwordController.clear();
   }
-
-
 
   //dispose
   @override

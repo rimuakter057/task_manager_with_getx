@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_management_live_project/data/service/network_caller.dart';
 import 'package:task_management_live_project/utils/app_text.dart';
+import 'package:task_management_live_project/view/screens/task_screens/nav_screen/nav_screen.dart';
 import 'package:task_management_live_project/view/widget/snack_bar_message.dart';
 
 import '../../../../utils/colors.dart';
@@ -148,7 +149,8 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     );
     if (isSuccess) {
       _clearTextField();
-      Get.back();
+      Get.offAllNamed(NavScreen.routeName);
+      //Get.back();
       Get.snackbar('Success', 'Task Added Successfully');
     }
     else {

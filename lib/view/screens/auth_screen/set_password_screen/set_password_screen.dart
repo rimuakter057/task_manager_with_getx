@@ -133,9 +133,6 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                     if (_formKey.currentState!.validate()) {
                       _setPasswordApi();
                     }
-                    //Get.toNamed(SignInScreen.routeName);
-
-                    // Navigator.pushNamed(context, SignInScreen.routeName);
                   },
                   child: const Text(
                    AppTexts.confirmedPasswordHint,
@@ -158,9 +155,19 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
  );
     if (isSuccess) {
       Get.offAll(const SignInScreen());
-
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.success,"update successful" ,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
       } else {
-      showSnackBar(AppTexts.failed, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.failed,"update successful" ,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
       }
     }
 
