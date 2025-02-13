@@ -48,6 +48,4 @@ userModel =UserModel.fromJson(jsonDecode(userData!));
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
   }
-
-
   }

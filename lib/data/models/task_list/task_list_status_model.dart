@@ -25,13 +25,13 @@ class TaskModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['title'] = this.title;
-    data['description'] = this.description;
-    data['status'] = this.status;
-    data['email'] = this.email;
-    data['createdDate'] = this.createdDate;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['title'] = title;
+    data['description'] = description;
+    data['status'] = status;
+    data['email'] = email;
+    data['createdDate'] = createdDate;
     return data;
   }
 }

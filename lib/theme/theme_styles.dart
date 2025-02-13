@@ -16,14 +16,12 @@ inputDecorationTheme: InputDecorationTheme(
     borderSide: BorderSide(
       color: AppColors.primaryColor,width: 1
     ),
-
   ),
   focusedBorder:  OutlineInputBorder(
     borderRadius: BorderRadius.circular(10),
     borderSide: BorderSide(
         color: AppColors.black.withOpacity(.1)
     ),
-
   ),
   hintStyle: TextStyle(
     color:AppColors.grey
@@ -32,7 +30,6 @@ inputDecorationTheme: InputDecorationTheme(
     vertical: 16.0,
     horizontal: 12.0,
   ),
-
 ),
   textTheme: TextTheme(
     titleLarge: TextStyle(
@@ -53,7 +50,6 @@ inputDecorationTheme: InputDecorationTheme(
       color: Colors.grey,
       fontWeight: FontWeight.w500,
     ),
-
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
@@ -70,5 +66,4 @@ inputDecorationTheme: InputDecorationTheme(
         )
     )
   )
-
 );

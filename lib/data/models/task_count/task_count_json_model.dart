@@ -11,7 +11,7 @@ class TaskCountStatusModel {
     if (json['data'] != null) {
       taskByStatusList = <TaskCountModel>[];
       json['data'].forEach((v) {
-        taskByStatusList!.add(new TaskCountModel.fromJson(v));
+        taskByStatusList!.add(TaskCountModel.fromJson(v));
       });
     }
   }
@@ -19,7 +19,7 @@ class TaskCountStatusModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
-    if (this.taskByStatusList != null) {
+    if (taskByStatusList != null) {
       data['data'] = taskByStatusList!.map((v) => v.toJson()).toList();
     }
     return data;
