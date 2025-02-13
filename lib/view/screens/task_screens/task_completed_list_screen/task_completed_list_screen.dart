@@ -14,7 +14,7 @@ import '../../../widget/snack_bar_message.dart';
 import '../../../widget/task_item_widget.dart';
 class TaskCompletedListScreen extends StatefulWidget {
   const TaskCompletedListScreen({super.key});
-  static const routeName = '/task-cancel-list-screen';
+  static const routeName = '/task-completed-list-screen';
 
   @override
   State<TaskCompletedListScreen> createState() => _TaskCancelListScreenState();

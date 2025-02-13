@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../data/models/task_list/task_list_status_json_model.dart';
@@ -14,7 +13,7 @@ import '../../../widget/snack_bar_message.dart';
 import '../../../widget/task_item_widget.dart';
 class TaskProgressListScreen extends StatefulWidget {
   const TaskProgressListScreen({super.key});
-  static const routeName = '/task-cancel-list-screen';
+  static const routeName = '/task-progress-list-screen';
 
   @override
   State<TaskProgressListScreen> createState() => _TaskCancelListScreenState();
