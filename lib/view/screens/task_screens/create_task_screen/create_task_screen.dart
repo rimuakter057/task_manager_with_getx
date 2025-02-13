@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:task_management_live_project/data/service/network_caller.dart';
 import 'package:task_management_live_project/utils/app_text.dart';
 import 'package:task_management_live_project/view/screens/task_screens/nav_screen/nav_screen.dart';
-import 'package:task_management_live_project/view/widget/snack_bar_message.dart';
-
 import '../../../../utils/colors.dart';
-import '../../../../utils/url.dart';
 import '../../../controller/create_task_controller.dart';
 
 class CreateTaskScreen extends StatefulWidget {
@@ -22,7 +18,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final CreateTaskController _createTaskController = Get.find<CreateTaskController>();
- // bool _addNewTaskInProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,30 +56,6 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-            /*  DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  hintText: 'choose status',
-
-                ),
-                value: _selectedValue, // Initial value (can be null)
-                items: <String>['New', 'Canceled', 'Completed','Progress'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedValue = newValue; // Update the selected value
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please select an option';
-                  }
-                  return null;
-                },
-              ),*/
               const SizedBox(
                 height: 15,
               ),
@@ -94,6 +66,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   if (value?.trim().isEmpty ?? true) {
                     return AppTexts.titleError;
                   }
+                  return null;
                 },
               ),
               const SizedBox(
@@ -108,6 +81,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   if (value?.trim().isEmpty ?? true) {
                     return AppTexts.descriptionError;
                   }
+                  return null;
                 },
               ),
               const SizedBox(
@@ -150,11 +124,22 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     if (isSuccess) {
       _clearTextField();
       Get.offAllNamed(NavScreen.routeName);
-      //Get.back();
-      Get.snackbar('Success', 'Task Added Successfully');
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.success,
+        "Create Task successful",
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
     else {
-      Get.snackbar('Error', _createTaskController.errorMessage!);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.failed,
+        "Create Task failed",
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
 
   }

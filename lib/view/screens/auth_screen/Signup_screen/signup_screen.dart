@@ -1,18 +1,12 @@
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:task_management_live_project/data/service/network_caller.dart';
 import 'package:task_management_live_project/utils/app_text.dart';
 import 'package:task_management_live_project/utils/colors.dart';
-import 'package:task_management_live_project/view/widget/snack_bar_message.dart';
-
 import '../../../../utils/styles.dart';
-import '../../../../utils/url.dart';
 import '../../../controller/auth_controller/signup_controller.dart';
 import '../../../widget/sign_in_up_section.dart';
-import '../signIn_screen/signIn_screen.dart';
+import '../signIn_screen/sign_in_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -176,13 +170,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
    void _onTapSignup() {
     if(_formKey.currentState!.validate()){
       _registerUser();
-      debugPrint("success signup");
     }else{
-      debugPrint("error signup");
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.failed,
+        _signUpController.errorMessage.toString(),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
    }
 
-//signup api function
+//signup api function get x
   Future<void> _registerUser()async{
      final bool isSuccess= await _signUpController.registerUser(
        _emailController.text.trim(),
@@ -193,18 +192,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
      );
     if (isSuccess) {
       _clearTextField();
+
+      Get.offAllNamed(SignInScreen.routeName);
+    }else{
       Get.snackbar(
         backgroundColor: AppColors.primaryColor,
-        AppTexts.success,"Sign Up Successfully" ,
+        AppTexts.failed,"Sign Up Failed" ,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
-
-
-      Get.offAllNamed(SignInScreen.routeName);
-      // Navigator.pushNamed(context, SignInScreen.routeName);
-    }else{
-      return showSnackBar(_signUpController.errorMessage!, context);
 
     }
   }

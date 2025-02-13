@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_management_live_project/utils/app_text.dart';
 import 'package:task_management_live_project/view/screens/task_screens/create_task_screen/create_task_screen.dart';
 import '../../../../utils/assets_path.dart';
@@ -32,10 +33,7 @@ class _NavScreenState extends State<NavScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(
-            context,
-            CreateTaskScreen.routeName,
-          );
+          Get.toNamed(CreateTaskScreen.routeName);
         },
         child: const Icon(Icons.add),
       ),

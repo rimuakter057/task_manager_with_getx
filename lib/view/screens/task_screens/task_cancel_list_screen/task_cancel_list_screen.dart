@@ -2,18 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_management_live_project/utils/app_text.dart';
-
 import '../../../../data/models/task_list/task_list_status_json_model.dart';
 import '../../../../data/models/task_list/task_list_status_model.dart';
-import '../../../../data/service/network_caller.dart';
 import '../../../../utils/colors.dart';
-import '../../../../utils/url.dart';
 import '../../../controller/task_controller/canceled_controller/canceled_task_list_controller.dart';
 import '../../../controller/task_controller/canceled_controller/delete_canceled_task_controller.dart';
 import '../../../controller/task_controller/canceled_controller/update_canceled_task_status_controller.dart';
 import '../../../widget/app_bar.dart';
 import '../../../widget/circular_indicator.dart';
-import '../../../widget/snack_bar_message.dart';
 import '../../../widget/task_item_widget.dart';
 
 class TaskCancelListScreen extends StatefulWidget {
@@ -44,7 +40,6 @@ class _TaskCancelListScreenState extends State<TaskCancelListScreen> {
       appBar: const AppBarWidget(),
       body: Column(
         children: [
-
           GetBuilder<CanceledTaskListController>(
             builder: (controller) {
               return Visibility(
@@ -139,27 +134,22 @@ class _TaskCancelListScreenState extends State<TaskCancelListScreen> {
                   onPressed: () {
                     if (selectedValue != null && selectedValue!.isNotEmpty)
                     {
-                      //  _selectedValue = selectedValue;
-
                       _updateTaskStatus(
                           taskList[index].sId ?? '',/*
                         newListStatusModel!.taskList![index].sId ??
                             '',*/
                           selectedValue ?? '');
-
                     }
                     else{
-                      showSnackBar("Please select a status!", context);
+                      Get.snackbar(
+                        backgroundColor: AppColors.primaryColor,
+                        AppTexts.failed,
+                        "Please select a status!",
+                        colorText: Colors.white,
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
                     }
-                    print("alert dialog done");
-
-                    /*_updateTaskStatus(
-                        taskList[index].sId ?? '',*//*
-                        newListStatusModel!.taskList![index].sId ??
-                            '',*//*
-                        selectedValue ?? '');*/
-                    Navigator.pop(context); // Close the dialog
-                    print("close dialog done");
+                    Get.back();// Close the dialog
                   },
                   child: const Text(
                     'Update',
@@ -180,7 +170,13 @@ class _TaskCancelListScreenState extends State<TaskCancelListScreen> {
   Future<void> _getSummaryCanceledList() async {
     final bool isSuccess = await _canceledTaskListController.getSummaryCanceledList();
     if (!isSuccess) {
-      showSnackBar(_canceledTaskListController.errorMessage!, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        "error",
+        _canceledTaskListController.errorMessage!,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
   // update task status api function get x
@@ -189,16 +185,35 @@ class _TaskCancelListScreenState extends State<TaskCancelListScreen> {
     if (isSuccess) {
       Get.snackbar("update status", "Task status updated successfully", );
     } else {
-      showSnackBar(_updateCanceledTaskStatusController.errorMessage!, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        "error",
+        _updateCanceledTaskStatusController.errorMessage!,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+
     }
   }
   // delete task api function get x
   Future<void> _deleteTask(String taskId) async {
     final bool isSuccess = await _deleteCanceledTaskController.deleteTask(taskId);
     if (isSuccess) {
-      showSnackBar("Task deleted successfully", context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.success,
+        "Task deleted successfully",
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } else {
-      showSnackBar(_deleteCanceledTaskController.errorMessage!, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        "error",
+        _deleteCanceledTaskController.errorMessage!,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 }

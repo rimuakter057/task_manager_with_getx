@@ -1,18 +1,12 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_management_live_project/data/service/network_caller.dart';
 import 'package:task_management_live_project/view/widget/circular_indicator.dart';
-import 'package:task_management_live_project/view/widget/snack_bar_message.dart';
-
 import '../../../../utils/app_text.dart';
 import '../../../../utils/colors.dart';
-import '../../../../utils/url.dart';
 import '../../../controller/auth_controller/set_password_controller.dart';
 import '../../../widget/sign_in_up_section.dart';
-import '../signIn_screen/signIn_screen.dart';
+import '../signIn_screen/sign_in_screen.dart';
 
 class SetPasswordScreen extends StatefulWidget {
   const SetPasswordScreen({
@@ -32,7 +26,6 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   final TextEditingController _confirmedPasswordController =
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _setInProgress = false;
 
   final SetPasswordController _setPasswordController = Get.find<SetPasswordController>();
 
@@ -50,14 +43,13 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     final prefs = await SharedPreferences.getInstance();
     email = prefs.getString('email')!;
     otp = prefs.getString('otp')!;
-    print(email);
-    print(otp);
+    debugPrint("save email======$email");
+    debugPrint("save otp=========$otp");
   }
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.titleLarge;
-    final mediumTitleStyle = Theme.of(context).textTheme.titleMedium;
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -66,11 +58,11 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 80),
-              Text('Set Password', style: titleStyle),
+              Text(AppTexts.passHeadline, style: textTheme.titleLarge),
               const SizedBox(height: 4),
               Text(
-                'Minimum 6 characters',
-                style: mediumTitleStyle,
+                AppTexts.passHeadline2,
+                style: textTheme.titleMedium,
               ),
               const SizedBox(height: 15),
               _buildTextForm(context),
@@ -115,7 +107,6 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
               } else if (value != _passwordController.text) {
                 return "confirmed password doesn't match";
               }
-              ;
 
               return null;
             },
@@ -132,6 +123,12 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _setPasswordApi();
+                      Get.snackbar(
+                        backgroundColor: AppColors.primaryColor,
+                        AppTexts.failed,"update failed" ,
+                        colorText: Colors.white,
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
                     }
                   },
                   child: const Text(
@@ -164,7 +161,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
       } else {
       Get.snackbar(
         backgroundColor: AppColors.primaryColor,
-        AppTexts.failed,"update successful" ,
+        AppTexts.failed,"update failed" ,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
       );

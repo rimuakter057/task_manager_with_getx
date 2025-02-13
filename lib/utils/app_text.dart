@@ -13,13 +13,14 @@ class AppTexts{
   static const String emailHeadline2 =    'A 6 digits of OTP will be sent to your email address';
   static const String pinHeadline="Pin Verification";
   static const String passHeadline = "Set Password";
-  static const String pass1Headline="Set Password";
+  static const String passHeadline2="must be at least 6 characters long";
   static const String updateProfileHeadline="Update Profile";
   static const String addTaskHeadline="Add Task";
   static const String updateTaskHeadline="Update Task";
 
+
   //headline two
-  static const String passHeadline2="Update Profile";
+  static const String updateProfile="Update Profile";
 
 
 
@@ -39,6 +40,7 @@ class AppTexts{
   static const String continueT = "Continue";
   static const String submit="Submit";
   static const String update ="Update";
+  static const String confirmed ="Confirmed";
 
   //text form field error text
   static const String emailError="Email can't be empty";
@@ -59,6 +61,7 @@ class AppTexts{
 
   /////////
  static const String forgotPass = "Forgot Password?";
+  static const String haveAccount = "Already have an account?";
  static const String noAccount = "you don't have an account?";
   static const String number = "5";
   static const String text = "text";

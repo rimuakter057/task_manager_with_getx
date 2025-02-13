@@ -8,7 +8,7 @@ import 'package:task_management_live_project/view/screens/auth_screen/Signup_scr
 import 'package:task_management_live_project/view/screens/auth_screen/recover_email_verify_screen/recover_email_verify_screen.dart';
 import 'package:task_management_live_project/view/screens/auth_screen/recover_otp_verify_screen/recover_otp_verify_screen.dart';
 import 'package:task_management_live_project/view/screens/auth_screen/set_password_screen/set_password_screen.dart';
-import 'package:task_management_live_project/view/screens/auth_screen/signIn_screen/signIn_screen.dart';
+import 'package:task_management_live_project/view/screens/auth_screen/signIn_screen/sign_in_screen.dart';
 import 'package:task_management_live_project/view/screens/auth_screen/splash_screen.dart';
 import 'package:task_management_live_project/view/screens/profile_screens/profile_update_screen/profile_update.dart';
 import 'package:task_management_live_project/view/screens/task_screens/create_task_screen/create_task_screen.dart';

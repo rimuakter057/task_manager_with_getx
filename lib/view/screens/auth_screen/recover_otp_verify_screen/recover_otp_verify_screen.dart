@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management_live_project/utils/app_text.dart';
-import '../../../../data/service/network_caller.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/styles.dart';
-import '../../../../utils/url.dart';
 import '../../../controller/auth_controller/recover_otp_controller.dart';
 import '../../../widget/circular_indicator.dart';
 import '../../../widget/sign_in_up_section.dart';
@@ -24,7 +21,7 @@ class RecoverOtpVerifyScreen extends StatefulWidget {
 }
 
 class _RecoverOtpVerifyScreenState extends State<RecoverOtpVerifyScreen> {
-  TextEditingController _otpController = TextEditingController();
+  final TextEditingController _otpController = TextEditingController();
 
   final RecoverOtpController _recoverOtpController =
   Get.find<RecoverOtpController>();
@@ -32,7 +29,7 @@ class _RecoverOtpVerifyScreenState extends State<RecoverOtpVerifyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.titleLarge;
+    final textTheme = Theme.of(context).textTheme;
     final mediumTitleStyle = Theme.of(context).textTheme.titleMedium;
     return Scaffold(
       body: Container(
@@ -40,7 +37,7 @@ class _RecoverOtpVerifyScreenState extends State<RecoverOtpVerifyScreen> {
         child: Column(
           children: [
             const SizedBox(height: 80),
-            Text('Pin Verification', style: titleStyle),
+            Text(AppTexts.pinHeadline, style: textTheme.titleLarge),
             const SizedBox(height: 4),
             Text(
               'Minimum 6 characters',
@@ -57,9 +54,7 @@ class _RecoverOtpVerifyScreenState extends State<RecoverOtpVerifyScreen> {
               pinTheme: appPinTheme(),
               backgroundColor: Colors.transparent,
               appContext: context,
-             /* onChanged: (pin) {
-                otpValue = pin;
-              },*/
+
             ),
             const SizedBox(
               height: 40,
@@ -72,7 +67,7 @@ class _RecoverOtpVerifyScreenState extends State<RecoverOtpVerifyScreen> {
                   child: ElevatedButton(
                     onPressed: _confirmedOnTap,
                     child: const Text(
-                      "Confirm",
+                      AppTexts.confirmed,
                     ),
                   ),
                 );
@@ -95,16 +90,19 @@ class _RecoverOtpVerifyScreenState extends State<RecoverOtpVerifyScreen> {
 
     if (_otpController.text.length == 6) {
       _recoverVerifyOtp();
-     debugPrint(_otpController.text);
+     debugPrint("otp controller here================${_otpController.text}");
     } else {
-    showSnackBar( AppTexts.otpFailed, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.failed,"otp failed" ,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
 
   // 0tp api function
-
-
   Future<void> _recoverVerifyOtp() async {
     final bool isSuccess = await  _recoverOtpController.recoverVerifyOtp(_otpController);
 
@@ -112,7 +110,7 @@ class _RecoverOtpVerifyScreenState extends State<RecoverOtpVerifyScreen> {
       Get.toNamed(  SetPasswordScreen.routeName);
       Get.snackbar(
         backgroundColor: AppColors.primaryColor,
-        AppTexts.success,"update successful" ,
+        AppTexts.success,"get otp successful" ,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -121,14 +119,10 @@ class _RecoverOtpVerifyScreenState extends State<RecoverOtpVerifyScreen> {
       showSnackBar(AppTexts.otpFailed, context);
       Get.snackbar(
         backgroundColor: AppColors.primaryColor,
-        AppTexts.otpFailed,"update successful" ,
+        AppTexts.otpFailed,_otpController.text ,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
   }
-
-
-
-
 }

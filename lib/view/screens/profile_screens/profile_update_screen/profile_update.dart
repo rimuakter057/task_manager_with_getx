@@ -1,14 +1,13 @@
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_management_live_project/utils/app_text.dart';
 import 'package:task_management_live_project/view/screens/task_screens/nav_screen/nav_screen.dart';
 import '../../../../data/controllers/auth_controller.dart';
-import '../../../../data/service/network_caller.dart';
 import '../../../../utils/colors.dart';
-import '../../../../utils/url.dart';
 import '../../../controller/profile_controller/update_profile_controller.dart';
 import '../../../widget/circular_indicator.dart';
-import '../../../widget/snack_bar_message.dart';
+
 
 class ProfileUpdate extends StatefulWidget {
   const ProfileUpdate({super.key});
@@ -27,7 +26,6 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final UpdateProfileController _updateProfileController = Get.find<UpdateProfileController>();
 
-  bool _updateProfileInProgress = false;
 
   @override
   void initState() {
@@ -50,7 +48,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Update Profile",
+              AppTexts.updateProfileHeadline,
               style: textTheme.titleLarge,
             ),
             const SizedBox(
@@ -85,7 +83,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailController,
                   decoration: const InputDecoration(
-                    hintText: 'Email',
+                    hintText: AppTexts.emailHint,
                   ),
                 ),
                 const SizedBox(
@@ -94,11 +92,11 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 TextFormField(
                   controller: _firstNameController,
                   decoration: const InputDecoration(
-                    hintText: 'First Name',
+                    hintText:  AppTexts.firstNameHint,
                   ),
                   validator: (String? value) {
                     if(value?.trim().isEmpty??true){
-                      return "first name can't be empty";
+                      return  AppTexts.firstNameError;
                     }return null;
                   },
                 ),
@@ -108,11 +106,11 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 TextFormField(
                   controller: _lastNameController,
                   decoration: const InputDecoration(
-                    hintText: 'Last Name',
+                    hintText:  AppTexts.lastNameHint,
                   ),
                   validator: (String? value) {
                     if(value?.trim().isEmpty??true){
-                      return "last name can't be empty";
+                      return AppTexts.lastNameError;
                     }return null;
                   },
                 ),
@@ -122,11 +120,11 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                 TextFormField(
                   controller: _mobileNumberController,
                   decoration: const InputDecoration(
-                    hintText: 'Mobile Number',
+                    hintText: AppTexts.mobileNumberHint,
                   ),
                   validator: (String? value) {
                     if(value?.trim().isEmpty??true){
-                      return "number can't be empty";
+                      return AppTexts.mobileNumberError;
                     }return null;
                   },
                 ),
@@ -137,7 +135,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                   obscureText: true,
                   controller: _passwordController,
                   decoration: const InputDecoration(
-                    hintText: 'Password',
+                    hintText:  AppTexts.passwordHint,
                   ),
                 ),
                 const SizedBox(
@@ -149,9 +147,7 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
                       visible: controller.updateProfileInProgress==false,
                       replacement: const CircularIndicator(),
                       child: ElevatedButton(onPressed:_onTapUpdate,
-                          child: const Text("Update")
-
-
+                          child: const Text(AppTexts.update)
                       ),
                     );
                   }
@@ -189,9 +185,8 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
 Future<void> _onTapUpdate()async{
     if(_formKey.currentState!.validate()){
       _updateProfile();
-      debugPrint("success update");
    }else{
-      debugPrint("update error");
+      debugPrint("update error==================");
     }
 }
 
@@ -207,11 +202,21 @@ Future<void> _onTapUpdate()async{
 
     if (isSuccess) {
       _passwordController.clear();
-      showSnackBar( "Profile Updated Successfully", context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.success,"Update Profile Success" ,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
       Get.offAllNamed(NavScreen.routeName);
     }
     else {
-      showSnackBar(UpdateProfileController().errorMessage!, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.failed,_updateProfileController.errorMessage.toString() ,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 }

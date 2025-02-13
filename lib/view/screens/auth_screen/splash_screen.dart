@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:task_management_live_project/utils/colors.dart';
-import 'package:task_management_live_project/view/screens/auth_screen/signIn_screen/signIn_screen.dart';
-
+import 'package:task_management_live_project/view/screens/auth_screen/signIn_screen/sign_in_screen.dart';
 import '../../../data/controllers/auth_controller.dart';
-import '../../widget/app_logo.dart';
 import '../../widget/screen_background.dart';
 import '../task_screens/nav_screen/nav_screen.dart';
 

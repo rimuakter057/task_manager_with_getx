@@ -1,19 +1,10 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_common/get_reset.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:task_management_live_project/data/service/network_caller.dart';
 import 'package:task_management_live_project/utils/colors.dart';
 import 'package:task_management_live_project/view/controller/auth_controller/sign_in_controller.dart';
 import 'package:task_management_live_project/view/screens/task_screens/nav_screen/nav_screen.dart';
-
-import '../../../../data/models/user_model.dart';
 import '../../../../utils/app_text.dart';
-import '../../../../utils/styles.dart';
-import '../../../../utils/url.dart';
 import '../../../widget/sign_in_up_section.dart';
-import '../../../widget/snack_bar_message.dart';
 import '../Signup_screen/signup_screen.dart';
 import '../recover_email_verify_screen/recover_email_verify_screen.dart';
 
@@ -30,7 +21,6 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _signInProgress = false;
   final SignInController _signInController = Get.find<SignInController>();
   @override
   Widget build(BuildContext context) {
@@ -59,17 +49,16 @@ class _SignInScreenState extends State<SignInScreen> {
               TextButton(
                 onPressed: () {
                   Get.toNamed(RecoverEmailVerifyScreen.routeName);
-                  // Navigator.pushNamed(context, ForgetEmailVerifyScreen.routeName);
                 },
                 child: Text(AppTexts.forgotPass, style: bodySmallStyle),
               ),
               //sign up text section
               SignInUpSection(
                 context: context,
+                account: AppTexts.noAccount,
                 text: AppTexts.signUp,
                 onTap: () {
-                  Get.offAll(const SignUpScreen());
-                  // Navigator.pushNamedAndRemoveUntil(context, SignUpScreen.routeName, (_) => false);
+                  Get.offAllNamed(SignUpScreen.routeName);
                 },
               )
             ],
@@ -83,18 +72,12 @@ class _SignInScreenState extends State<SignInScreen> {
   void _signInOnTap() {
     if (_formKey.currentState!.validate()) {
       _signInUser();
-      Get.snackbar(
-        backgroundColor: AppColors.primaryColor,
-        AppTexts.success,
-        "update successful",
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+
     } else {
       Get.snackbar(
         backgroundColor: AppColors.primaryColor,
         AppTexts.failed,
-        "Sign in failed",
+        "SignIn failed",
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -168,12 +151,16 @@ class _SignInScreenState extends State<SignInScreen> {
     final bool isSuccess = await _signInController.signInUser(
         _emailController.text.trim(), _passwordController.text);
     if (isSuccess) {
-      Get.offAll(const NavScreen());
-      //  Navigator.pushNamedAndRemoveUntil(context,  NavScreen.routeName,  (_) => false);
-
+      Get.offAllNamed(NavScreen.routeName);
       _clearTextField();
     } else {
-      showSnackBar(_signInController.errorMessage!, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.failed,
+        _signInController.errorMessage!,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 

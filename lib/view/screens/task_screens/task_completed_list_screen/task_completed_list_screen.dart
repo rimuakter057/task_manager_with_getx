@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_management_live_project/utils/app_text.dart';
 import '../../../../data/models/task_list/task_list_status_json_model.dart';
 import '../../../../data/models/task_list/task_list_status_model.dart';
 import '../../../../utils/colors.dart';
@@ -135,27 +136,16 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
                   onPressed: () {
                     if (selectedValue != null && selectedValue!.isNotEmpty)
                     {
-                      //  _selectedValue = selectedValue;
-
                       _updateTaskStatus(
                           taskList[index].sId ?? '',/*
                         newListStatusModel!.taskList![index].sId ??
                             '',*/
                           selectedValue ?? '');
-
                     }
                     else{
                       showSnackBar("Please select a status!", context);
                     }
-                    print("alert dialog done");
-
-                    /*_updateTaskStatus(
-                        taskList[index].sId ?? '',*//*
-                        newListStatusModel!.taskList![index].sId ??
-                            '',*//*
-                        selectedValue ?? '');*/
-                    Navigator.pop(context); // Close the dialog
-                    print("close dialog done");
+                   Get.back();
                   },
                   child: const Text(
                     'Update',
@@ -176,25 +166,54 @@ class _TaskCancelListScreenState extends State<TaskCompletedListScreen> {
   Future<void> _getSummaryCompletedList() async {
     final bool isSuccess = await  _completedTaskListController.getSummaryCompletedList();
     if (!isSuccess) {
-      showSnackBar( _completedTaskListController.errorMessage!, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        "error",
+        _completedTaskListController.errorMessage!,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
   // update task status api function get x
   Future<void> _updateTaskStatus(String taskId, String status)async {
     final bool isSuccess = await _updateCompletedTaskStatusController.updateTaskStatus(taskId, status);
     if (isSuccess) {
-      Get.snackbar("update status", "Task status updated successfully", );
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        "update status", "Task status updated successfully",
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } else {
-      showSnackBar(_updateCompletedTaskStatusController.errorMessage!, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        "error",
+        _updateCompletedTaskStatusController.errorMessage!,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
   // delete task api function get x
   Future<void> _deleteTask(String taskId) async {
     final bool isSuccess = await _deleteCompletedTaskController.deleteTask(taskId);
     if (isSuccess) {
-      showSnackBar("Task deleted successfully", context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.success,
+        "Task deleted successfully",
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } else {
-      showSnackBar(_deleteCompletedTaskController.errorMessage!, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        "error",
+        _deleteCompletedTaskController.errorMessage!,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 

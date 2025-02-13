@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../data/models/task_list/task_list_status_json_model.dart';
 import '../../../../data/models/task_list/task_list_status_model.dart';
+import '../../../../utils/app_text.dart';
 import '../../../../utils/colors.dart';
 import '../../../controller/task_controller/new_controller/update_new_task_status_controller.dart';
 import '../../../controller/task_controller/progress_controller/delete_progress_task_controller.dart';
@@ -185,18 +186,42 @@ class _TaskCancelListScreenState extends State<TaskProgressListScreen> {
   Future<void> _deleteTask(String taskId) async {
     final bool isSuccess = await _deleteProgressTaskController.deleteTask(taskId);
     if (isSuccess) {
-      showSnackBar("Task deleted successfully", context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.success,
+        "Task deleted successfully",
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } else {
-      showSnackBar(_deleteProgressTaskController.errorMessage!, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        "error",
+        _deleteProgressTaskController.errorMessage!,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
   // update task status api function get x
   Future<void> _updateTaskStatus(String taskId, String status)async {
     final bool isSuccess = await _updateProgressTaskStatusController.updateTaskStatus(taskId, status);
     if (isSuccess) {
-      Get.snackbar("update status", "Task status updated successfully", );
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        AppTexts.success,
+        "Task status updated successfully",
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } else {
-      showSnackBar(_updateProgressTaskStatusController.errorMessage!, context);
+      Get.snackbar(
+        backgroundColor: AppColors.primaryColor,
+        "error",
+        _updateProgressTaskStatusController.errorMessage!,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 }
