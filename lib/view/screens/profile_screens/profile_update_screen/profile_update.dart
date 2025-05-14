@@ -42,32 +42,36 @@ class _ProfileUpdateState extends State<ProfileUpdate> {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
         body: SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              AppTexts.updateProfileHeadline,
-              style: textTheme.titleLarge,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                _buildPhotoPicker(),
-                const SizedBox(
-                  width: 10,
-                ),
-
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            _buildTextForm(),
-          ],
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 60,),
+              Text(
+                AppTexts.updateProfileHeadline,
+                style: textTheme.titleLarge,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  _buildPhotoPicker(),
+                  const SizedBox(
+                    width: 10,
+                  ),
+        
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              _buildTextForm(),
+            ],
+          ),
         ),
       ),
     ));

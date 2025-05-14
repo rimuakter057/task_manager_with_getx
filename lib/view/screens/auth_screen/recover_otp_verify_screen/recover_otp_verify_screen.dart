@@ -36,7 +36,7 @@ class _RecoverOtpVerifyScreenState extends State<RecoverOtpVerifyScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const SizedBox(height: 80),
+            const SizedBox(height: 100,),
             Text(AppTexts.pinHeadline, style: textTheme.titleLarge),
             const SizedBox(height: 4),
             Text(

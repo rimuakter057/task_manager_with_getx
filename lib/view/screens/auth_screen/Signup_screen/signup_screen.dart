@@ -39,6 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const SizedBox(height: 150,),
               Text(
                AppTexts.signUp,
              style: textTheme.titleLarge,

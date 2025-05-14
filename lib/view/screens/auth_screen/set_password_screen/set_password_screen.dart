@@ -57,7 +57,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 80),
+              const SizedBox(height: 100,),
               Text(AppTexts.passHeadline, style: textTheme.titleLarge),
               const SizedBox(height: 4),
               Text(

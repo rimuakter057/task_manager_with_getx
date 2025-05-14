@@ -34,6 +34,7 @@ class _SignInScreenState extends State<SignInScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const SizedBox(height: 150,),
               Text(
                 AppTexts.signInHeadline,
                 style: titleStyle,
