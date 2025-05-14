@@ -30,3 +30,19 @@
 <p float="left">
   <img src="assets/screenshots/update.jpg" width="200"/>
 </p>
+
+---
+
+## 🛠️ Technologies Used
+
+This app is built with the following technologies:
+
+- 🔹 **Flutter** (UI development)
+- 🔹 **Dart** (Programming Language)
+- 🔹 **Restful Api**
+- 🔹 **GetX** (State Management and Navigation)
+- 🔹 **Model Json** (For organizing data)
+- 🔹 **Responsive UI** (Supports multiple screen sizes)
+- 🔹 **Reusable UI Components** (Modular UI elements for consistency)
+
+---
