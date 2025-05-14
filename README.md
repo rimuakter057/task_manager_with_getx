@@ -1,16 +1,32 @@
-# task_manager
+# Task Management App 📖
 
-A new Flutter project.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## 🖼 App Screenshots
 
-A few resources to get you started if this is your first Flutter project:
+### 🔹 Row 1
+<p float="left">
+  <img src="assets/screenshots/splash.jpg" width="200"/>
+  <img src="assets/screenshots/sign_in.jpg" width="200"/>
+  <img src="assets/screenshots/sign_up.jpg" width="200"/>
+  <img src="assets/screenshots/verify_email.jpg" width="200"/>
+</p>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 🔹 Row 2
+<p float="left">
+  <img src="assets/screenshots/pin.jpg" width="200"/>
+  <img src="assets/screenshots/new.jpg" width="200"/>
+  <img src="assets/screenshots/status.jpg" width="200"/>
+  <img src="assets/screenshots/status_change.jpg" width="200"/>
+</p>
+### 🔹 Row 3
+<p float="left">
+  <img src="assets/screenshots/canceled.jpg" width="200"/>
+  <img src="assets/screenshots/completed.jpg" width="200"/>
+  <img src="assets/screenshots/progress.jpg" width="200"/>
+  <img src="assets/screenshots/add.jpg" width="200"/>
+</p>
+### 🔹 Row 4
+<p float="left">
+  <img src="assets/screenshots/update.jpg" width="200"/>
+</p>
